@@ -3,7 +3,7 @@
 [![](https://images.microbadger.com/badges/image/xlievo/jenkins-core.svg)](https://microbadger.com/images/xlievo/jenkins-core "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/xlievo/jenkins-core.svg)](https://microbadger.com/images/xlievo/jenkins-core "Get your own version badge on microbadger.com")
 
-1. yum install git -y && mkdir ci && cd ci && git clone https://github.com/xlievo/jenkins-core.git && cd jenkins-core && sh init.sh
+1. yum install git -y && mkdir ci && cd ci && git clone https://github.com/xlievo/lib.git && cd lib/jenkins-core && sh init.sh
 
 2. Open ip:8180 on the browser 
 
