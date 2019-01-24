@@ -12,3 +12,9 @@ docker-compose up -d
 
 sleep 25
 echo `docker logs jenkins-core_jenkins-core_1`
+
+sudo docker rmi -f $(sudo docker images --filter=reference='xlievo/jenkins-core:latest' -q)
+sudo docker commit $(sudo docker ps -aqf 'name=jenkins-core_jenkins-core') xlievo/jenkins-core
+sudo docker push xlievo/jenkins-core
+
+
