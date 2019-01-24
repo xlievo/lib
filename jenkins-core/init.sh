@@ -3,6 +3,8 @@ sh get-docker.sh --mirror Aliyun
 systemctl enable docker
 systemctl start docker
 
+sudo docker rm -f $(sudo docker ps -aqf 'name=jenkins-core_jenkins-core')
+
 mkdir jenkins_home
 chown 1000 jenkins_home
 yum -y install epel-release python-pip
