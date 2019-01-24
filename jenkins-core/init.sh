@@ -15,7 +15,7 @@ pip install --upgrade pip
 pip install docker-compose --ignore-installed requests
 docker-compose up -d
 
-sleep 25
+sleep 45
 echo `docker logs jenkins-core_jenkins-core_1`
 
 sudo docker rmi -f $(sudo docker images --filter=reference='xlievo/jenkins-core:latest' -q)
