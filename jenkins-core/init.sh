@@ -3,7 +3,9 @@ sh get-docker.sh --mirror Aliyun
 systemctl enable docker
 systemctl start docker
 
-sudo docker rm -f $(sudo docker ps -aqf 'name=jenkins-core_jenkins-core')
+sudo docker rm -f $(sudo docker ps -aqf 'name=jenkins-core_jenkins-core_1')
+sudo docker rmi -f $(sudo docker images --filter=reference='xlievo/jenkins-core:latest' -q)
+sudo docker rmi -f $(sudo docker images --filter=reference='jenkins-core_jenkins-core:latest' -q)
 
 mkdir jenkins_home
 chown 1000 jenkins_home
