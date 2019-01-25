@@ -13,6 +13,6 @@ Original construction:
 
 Docker run:
 
-docker run -d --name ci --restart=always --privileged=true -p 50000:50000 -p 8180:8080 xlievo/jenkins-core:latest
+docker run -d -u root --name ci --restart=always --privileged=true -p 50000:50000 -p 8180:8080 -v /root/workspace/ci:/var/jenkins_home/data xlievo/jenkins-core:latest
 
 docker logs ci (View password)

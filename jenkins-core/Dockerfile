@@ -1,5 +1,5 @@
 FROM jenkins/jenkins:lts
-RUN /usr/local/bin/install-plugins.sh publish-over-ssh gogs-webhook
+RUN /usr/local/bin/install-plugins.sh publish-over-ssh gitee #gogs-webhook
 
 USER root
 COPY install.sh install.sh
