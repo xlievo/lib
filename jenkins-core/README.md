@@ -16,3 +16,7 @@ Docker run:
 docker run -d -u root --name ci --restart=always --privileged=true -p 50000:50000 -p 8180:8080 -v /root/workspace/ci:/var/jenkins_home/data xlievo/jenkins-core:latest
 
 docker logs ci (View password)
+
+dotnet restore
+dotnet build
+dotnet publish -c release -o /var/jenkins_home/data/app
