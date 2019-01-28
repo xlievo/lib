@@ -7,7 +7,7 @@ systemctl stop firewalld && systemctl disable firewalld
 
 yum -y install nfs-utils && systemctl start rpcbind nfs-server && systemctl enable rpcbind nfs-server
 
-echo '/root/workspace/ci/data 172.27.16.3(rw,async,all_squash)' >> /etc/exports
+echo '/root/workspace/data/apps/client 172.27.16.3(rw,async,all_squash)' >> /etc/exports
 
 showmount -e
 firewall-cmd --add-service=nfs --permanent
