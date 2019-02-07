@@ -11,13 +11,9 @@ FROM phusion/baseimage
 MAINTAINER Sebastien Pujadas http://pujadas.net
 ENV REFRESHED_AT 2017-02-28
 
-ENV TZ=Asia/Shanghai
 ###############################################################################
 #                                INSTALLATION
 ###############################################################################
-
-RUN curl -O https://github.com/xlievo/lib/releases/download/elk/elasticsearch-6.6.0.tar.gz \
- && tar xzf elasticsearch-6.6.0.tar.gz -C /opt/elasticsearch --strip-components=1 
 
 ### install prerequisites (cURL, gosu, JDK, tzdata)
 
@@ -26,7 +22,7 @@ ENV GOSU_VERSION 1.10
 ARG DEBIAN_FRONTEND=noninteractive
 RUN set -x \
  && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends ca-certificates curl \
+ && apt-get install -qqy --no-install-recommends ca-certificates curl wget \
  && rm -rf /var/lib/apt/lists/* \
  && curl -L -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
  && curl -L -o /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
@@ -54,7 +50,7 @@ ENV ES_PATH_CONF /etc/elasticsearch
 ENV ES_PATH_BACKUP /var/backups
 
 RUN mkdir ${ES_HOME} \
- && curl -O https://github.com/xlievo/lib/releases/download/elk/${ES_PACKAGE} \
+ && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/${ES_PACKAGE} \
  && tar xzf ${ES_PACKAGE} -C ${ES_HOME} --strip-components=1 \
  && rm -f ${ES_PACKAGE} \
  && groupadd -r elasticsearch -g ${ES_GID} \
@@ -78,7 +74,7 @@ ENV LOGSTASH_PATH_CONF /etc/logstash
 ENV LOGSTASH_PATH_SETTINGS ${LOGSTASH_HOME}/config
 
 RUN mkdir ${LOGSTASH_HOME} \
- && curl -O https://github.com/xlievo/lib/releases/download/elk/${LOGSTASH_PACKAGE} \
+ && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/${LOGSTASH_PACKAGE} \
  && tar xzf ${LOGSTASH_PACKAGE} -C ${LOGSTASH_HOME} --strip-components=1 \
  && rm -f ${LOGSTASH_PACKAGE} \
  && groupadd -r logstash -g ${LOGSTASH_GID} \
@@ -100,7 +96,7 @@ ENV KIBANA_GID 993
 ENV KIBANA_UID 993
 
 RUN mkdir ${KIBANA_HOME} \
- && curl -O https://github.com/xlievo/lib/releases/download/elk/${KIBANA_PACKAGE} \
+ && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/${KIBANA_PACKAGE} \
  && tar xzf ${KIBANA_PACKAGE} -C ${KIBANA_HOME} --strip-components=1 \
  && rm -f ${KIBANA_PACKAGE} \
  && groupadd -r kibana -g ${KIBANA_GID} \
@@ -175,9 +171,10 @@ RUN chmod +x /usr/local/bin/start.sh
 EXPOSE 5601 9200 9300 5044 6379
 VOLUME /var/lib/elasticsearch
 
+ENV TZ=Asia/Shanghai
 ### ENV LC_ALL=zh_CN.UTF-8
 RUN apt-get install -y wget gcc make
-RUN cd /root && wget https://github.com/xlievo/lib/releases/download/elk/redis-stable.tar.gz && tar xzf redis-stable.tar.gz && cd redis-stable && make
+RUN cd /root && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/redis-stable.tar.gz && tar xzf redis-stable.tar.gz && cd redis-stable && make
 COPY redis.conf /root/redis-stable/redis.conf
 RUN rm -rf /etc/logstash/conf.d/*
 COPY logstash-redis.conf /etc/logstash/conf.d/logstash-redis.conf
