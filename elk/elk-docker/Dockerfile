@@ -37,7 +37,7 @@ RUN set -x \
  && apt-get clean \
  && set +x
 
-ENV ELK_VERSION 6.5.1
+ENV ELK_VERSION 6.6.0
 
 ### install Elasticsearch
 
@@ -50,7 +50,7 @@ ENV ES_PATH_CONF /etc/elasticsearch
 ENV ES_PATH_BACKUP /var/backups
 
 RUN mkdir ${ES_HOME} \
- && curl -O https://artifacts.elastic.co/downloads/elasticsearch/${ES_PACKAGE} \
+ && curl -O https://github.com/xlievo/lib/releases/download/elk/${ES_PACKAGE} \
  && tar xzf ${ES_PACKAGE} -C ${ES_HOME} --strip-components=1 \
  && rm -f ${ES_PACKAGE} \
  && groupadd -r elasticsearch -g ${ES_GID} \
@@ -74,7 +74,7 @@ ENV LOGSTASH_PATH_CONF /etc/logstash
 ENV LOGSTASH_PATH_SETTINGS ${LOGSTASH_HOME}/config
 
 RUN mkdir ${LOGSTASH_HOME} \
- && curl -O https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_PACKAGE} \
+ && curl -O https://github.com/xlievo/lib/releases/download/elk/${LOGSTASH_PACKAGE} \
  && tar xzf ${LOGSTASH_PACKAGE} -C ${LOGSTASH_HOME} --strip-components=1 \
  && rm -f ${LOGSTASH_PACKAGE} \
  && groupadd -r logstash -g ${LOGSTASH_GID} \
@@ -96,7 +96,7 @@ ENV KIBANA_GID 993
 ENV KIBANA_UID 993
 
 RUN mkdir ${KIBANA_HOME} \
- && curl -O https://artifacts.elastic.co/downloads/kibana/${KIBANA_PACKAGE} \
+ && curl -O https://github.com/xlievo/lib/releases/download/elk/${KIBANA_PACKAGE} \
  && tar xzf ${KIBANA_PACKAGE} -C ${KIBANA_HOME} --strip-components=1 \
  && rm -f ${KIBANA_PACKAGE} \
  && groupadd -r kibana -g ${KIBANA_GID} \
@@ -174,7 +174,7 @@ VOLUME /var/lib/elasticsearch
 ENV TZ=Asia/Shanghai
 ### ENV LC_ALL=zh_CN.UTF-8
 RUN apt-get install -y wget gcc make
-RUN cd /root && wget http://download.redis.io/releases/redis-stable.tar.gz && tar xzf redis-stable.tar.gz && cd redis-stable && make
+RUN cd /root && wget https://github.com/xlievo/lib/releases/download/elk/redis-stable.tar.gz && tar xzf redis-stable.tar.gz && cd redis-stable && make
 COPY redis.conf /root/redis-stable/redis.conf
 RUN rm -rf /etc/logstash/conf.d/*
 COPY logstash-redis.conf /etc/logstash/conf.d/logstash-redis.conf
