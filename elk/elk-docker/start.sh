@@ -180,6 +180,8 @@ else
   OUTPUT_LOGFILES+="/var/log/logstash/logstash-plain.log "
 fi
 
+sh /root/redis-stable/redis-password.sh
+
 
 ### Kibana
 

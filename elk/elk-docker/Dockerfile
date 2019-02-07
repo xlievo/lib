@@ -181,6 +181,6 @@ COPY logstash-redis.conf /etc/logstash/conf.d/logstash-redis.conf
 
 ADD ./redis-password.sh /root/redis-stable/redis-password.sh
 RUN chmod +x /root/redis-stable/redis-password.sh
-RUN bash /root/redis-stable/redis-password.sh
+#RUN bash /root/redis-stable/redis-password.sh
 
 CMD [ "/usr/local/bin/start.sh" ]
