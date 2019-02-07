@@ -47,7 +47,7 @@ if [ -x /usr/local/bin/elk-pre-hooks.sh ]; then
   . /usr/local/bin/elk-pre-hooks.sh
 fi
 
-
+sh /root/redis-stable/redis-password.sh
 /root/redis-stable/src/redis-server /root/redis-stable/redis.conf
 sed -n 508,508p /root/redis-stable/redis.conf
 
@@ -179,8 +179,6 @@ else
   service logstash start
   OUTPUT_LOGFILES+="/var/log/logstash/logstash-plain.log "
 fi
-
-sh /root/redis-stable/redis-password.sh
 
 
 ### Kibana

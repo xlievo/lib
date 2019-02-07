@@ -11,9 +11,13 @@ FROM phusion/baseimage
 MAINTAINER Sebastien Pujadas http://pujadas.net
 ENV REFRESHED_AT 2017-02-28
 
+ENV TZ=Asia/Shanghai
 ###############################################################################
 #                                INSTALLATION
 ###############################################################################
+
+RUN curl -O https://github.com/xlievo/lib/releases/download/elk/elasticsearch-6.6.0.tar.gz \
+ && tar xzf elasticsearch-6.6.0.tar.gz -C /opt/elasticsearch --strip-components=1 
 
 ### install prerequisites (cURL, gosu, JDK, tzdata)
 
@@ -171,7 +175,6 @@ RUN chmod +x /usr/local/bin/start.sh
 EXPOSE 5601 9200 9300 5044 6379
 VOLUME /var/lib/elasticsearch
 
-ENV TZ=Asia/Shanghai
 ### ENV LC_ALL=zh_CN.UTF-8
 RUN apt-get install -y wget gcc make
 RUN cd /root && wget https://github.com/xlievo/lib/releases/download/elk/redis-stable.tar.gz && tar xzf redis-stable.tar.gz && cd redis-stable && make
