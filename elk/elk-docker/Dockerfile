@@ -181,9 +181,6 @@ COPY redis/redis.conf ${REDIS_HOME}/redis.conf
 RUN rm -rf ${LOGSTASH_PATH_CONF}/conf.d/*
 COPY redis/logstash-redis.conf ${LOGSTASH_PATH_CONF}/conf.d/logstash-redis.conf
 
-COPY redis/redis-password.sh ${REDIS_HOME}/redis-password.sh
-RUN chmod +x ${REDIS_HOME}/redis-password.sh
-
 EXPOSE 6379
 
 COPY redis/redis.sh /usr/local/bin/redis.sh
