@@ -1,5 +1,7 @@
 #!/bin/bash
 
-sh $1/redis-password.sh
-exec $1/src/redis-server $1/redis.conf
-sed -n 507,507p $1/redis.conf
+REDIS_HOME = "/opt/redis"
+
+sh $REDIS_HOME/redis-password.sh
+$REDIS_HOME/src/redis-server $REDIS_HOME/redis.conf
+sed -n 507,507p $REDIS_HOME/redis.conf
