@@ -1,5 +1,5 @@
 # Dockerfile for ELK stack
-# Elasticsearch, Logstash, Kibana 6.5.1
+# Elasticsearch, Logstash, Kibana 6.6.0
 
 # Build with:
 # docker build -t <repo-user>/elk .
@@ -10,6 +10,7 @@
 FROM phusion/baseimage
 MAINTAINER Sebastien Pujadas http://pujadas.net
 ENV REFRESHED_AT 2017-02-28
+
 
 ###############################################################################
 #                                INSTALLATION
@@ -22,12 +23,12 @@ ENV GOSU_VERSION 1.10
 ARG DEBIAN_FRONTEND=noninteractive
 RUN set -x \
  && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends ca-certificates curl wget \
+ && apt-get install -qqy --no-install-recommends ca-certificates curl \
  && rm -rf /var/lib/apt/lists/* \
  && curl -L -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
  && curl -L -o /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
  && export GNUPGHOME="$(mktemp -d)" \
- && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+ && gpg --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
  && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
  && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
  && chmod +x /usr/local/bin/gosu \
@@ -36,6 +37,7 @@ RUN set -x \
  && apt-get install -qqy openjdk-8-jdk tzdata \
  && apt-get clean \
  && set +x
+
 
 ENV ELK_VERSION 6.6.0
 
@@ -50,7 +52,7 @@ ENV ES_PATH_CONF /etc/elasticsearch
 ENV ES_PATH_BACKUP /var/backups
 
 RUN mkdir ${ES_HOME} \
- && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/${ES_PACKAGE} \
+ && curl -O https://artifacts.elastic.co/downloads/elasticsearch/${ES_PACKAGE} \
  && tar xzf ${ES_PACKAGE} -C ${ES_HOME} --strip-components=1 \
  && rm -f ${ES_PACKAGE} \
  && groupadd -r elasticsearch -g ${ES_GID} \
@@ -74,7 +76,7 @@ ENV LOGSTASH_PATH_CONF /etc/logstash
 ENV LOGSTASH_PATH_SETTINGS ${LOGSTASH_HOME}/config
 
 RUN mkdir ${LOGSTASH_HOME} \
- && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/${LOGSTASH_PACKAGE} \
+ && curl -O https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_PACKAGE} \
  && tar xzf ${LOGSTASH_PACKAGE} -C ${LOGSTASH_HOME} --strip-components=1 \
  && rm -f ${LOGSTASH_PACKAGE} \
  && groupadd -r logstash -g ${LOGSTASH_GID} \
@@ -96,7 +98,7 @@ ENV KIBANA_GID 993
 ENV KIBANA_UID 993
 
 RUN mkdir ${KIBANA_HOME} \
- && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/${KIBANA_PACKAGE} \
+ && curl -O https://artifacts.elastic.co/downloads/kibana/${KIBANA_PACKAGE} \
  && tar xzf ${KIBANA_PACKAGE} -C ${KIBANA_HOME} --strip-components=1 \
  && rm -f ${KIBANA_PACKAGE} \
  && groupadd -r kibana -g ${KIBANA_GID} \
@@ -160,6 +162,33 @@ RUN chmod 644 /etc/logrotate.d/elasticsearch \
 
 ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 
+### install redis
+
+ENV TZ=Asia/Shanghai
+### ENV LC_ALL=zh_CN.UTF-8
+
+ENV REDIS_HOME /opt/redis
+ENV REDIS_PACKAGE redis-stable.tar.gz
+
+RUN apt-get install -y gcc make \
+ && mkdir ${REDIS_HOME} \
+ && curl -O http://download.redis.io/releases/${REDIS_PACKAGE} \
+ && tar xzf ${REDIS_PACKAGE} -C ${REDIS_HOME} --strip-components=1 \
+ && rm -f ${REDIS_PACKAGE} \
+ && cd ${REDIS_HOME} && make
+
+COPY redis/redis.conf ${REDIS_HOME}/redis.conf
+RUN rm -rf ${LOGSTASH_PATH_CONF}/conf.d/*
+COPY redis/logstash-redis.conf ${LOGSTASH_PATH_CONF}/conf.d/logstash-redis.conf
+
+COPY redis/redis-password.sh ${REDIS_HOME}/redis-password.sh
+RUN chmod +x ${REDIS_HOME}/redis-password.sh
+
+EXPOSE 6379
+
+COPY ./redis.sh /usr/local/bin/redis.sh
+RUN chmod +x /usr/local/bin/redis.sh
+ENTRYPOINT ["/usr/local/bin/redis.sh", ${REDIS_HOME}]
 
 ###############################################################################
 #                                   START
@@ -168,19 +197,7 @@ ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 ADD ./start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-EXPOSE 5601 9200 9300 5044 6379
+EXPOSE 5601 9200 9300 5044
 VOLUME /var/lib/elasticsearch
-
-ENV TZ=Asia/Shanghai
-### ENV LC_ALL=zh_CN.UTF-8
-RUN apt-get install -y wget gcc make
-RUN cd /root && wget -q --show-progress --progress=bar:force:noscroll https://github.com/xlievo/lib/releases/download/elk/redis-stable.tar.gz && tar xzf redis-stable.tar.gz && cd redis-stable && make
-COPY redis.conf /root/redis-stable/redis.conf
-RUN rm -rf /etc/logstash/conf.d/*
-COPY logstash-redis.conf /etc/logstash/conf.d/logstash-redis.conf
-
-ADD ./redis-password.sh /root/redis-stable/redis-password.sh
-RUN chmod +x /root/redis-stable/redis-password.sh
-#RUN bash /root/redis-stable/redis-password.sh
 
 CMD [ "/usr/local/bin/start.sh" ]
