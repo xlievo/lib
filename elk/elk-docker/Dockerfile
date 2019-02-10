@@ -186,7 +186,7 @@ RUN chmod +x ${REDIS_HOME}/redis-password.sh
 
 EXPOSE 6379
 
-COPY ./redis.sh /usr/local/bin/redis.sh
+COPY redis/redis.sh /usr/local/bin/redis.sh
 RUN chmod +x /usr/local/bin/redis.sh
 ENTRYPOINT ["/usr/local/bin/redis.sh", ${REDIS_HOME}]
 
