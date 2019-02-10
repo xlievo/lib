@@ -47,6 +47,9 @@ if [ -x /usr/local/bin/elk-pre-hooks.sh ]; then
   . /usr/local/bin/elk-pre-hooks.sh
 fi
 
+sh $REDIS_HOME/redis-password.sh
+exec $REDIS_HOME/src/redis-server $REDIS_HOME/redis.conf
+sed -n 507,507p $REDIS_HOME/redis.conf
 
 ## start services as needed
 

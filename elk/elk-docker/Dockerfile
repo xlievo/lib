@@ -186,9 +186,9 @@ RUN chmod +x ${REDIS_HOME}/redis-password.sh
 
 EXPOSE 6379
 
-COPY redis/redis.sh /usr/local/bin/redis.sh
-RUN chmod +x /usr/local/bin/redis.sh
-ENTRYPOINT ["/usr/local/bin/redis.sh", ${REDIS_HOME}]
+#COPY redis/redis.sh /usr/local/bin/redis.sh
+#RUN chmod +x /usr/local/bin/redis.sh
+#ENTRYPOINT ["/usr/local/bin/redis.sh", ${REDIS_HOME}]
 
 ###############################################################################
 #                                   START
@@ -200,4 +200,4 @@ RUN chmod +x /usr/local/bin/start.sh
 EXPOSE 5601 9200 9300 5044
 VOLUME /var/lib/elasticsearch
 
-CMD [ "/usr/local/bin/start.sh" ]
+CMD [ "/usr/local/bin/start.sh", ${REDIS_HOME} ]
