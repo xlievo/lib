@@ -196,7 +196,7 @@ RUN apt-get install -y python-software-properties
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash  -
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
-RUN npm install [email protected] -g
+RUN npm install pm2@latest -g
 
 RUN apt-get clean
 
