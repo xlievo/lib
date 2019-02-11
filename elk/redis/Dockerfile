@@ -1,3 +1,6 @@
+
+docker run --restart=always --privileged=true -u root -v /root/workspace/elk-data:/var/lib/elasticsearch -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 6000:6379 -itd --name elk xlievo/elk:latest
+
 ### install redis
 
 ENV TZ=Asia/Shanghai
@@ -21,3 +24,13 @@ EXPOSE 6379
 
 COPY redis/redis.sh /usr/local/bin/redis.sh
 RUN chmod +x /usr/local/bin/redis.sh
+
+RUN apt-get update
+RUN apt-get install -y dotnet-sdk-2.2
+
+RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash  -
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+RUN npm install pm2 -g
+
+RUN apt-get clean

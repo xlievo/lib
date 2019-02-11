@@ -186,6 +186,16 @@ EXPOSE 6379
 COPY redis/redis.sh /usr/local/bin/redis.sh
 RUN chmod +x /usr/local/bin/redis.sh
 
+RUN apt-get update
+RUN apt-get install -y dotnet-sdk-2.2
+
+RUN curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash  -
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+RUN npm install pm2 -g
+
+RUN apt-get clean
+
 ###############################################################################
 #                                   START
 ###############################################################################
