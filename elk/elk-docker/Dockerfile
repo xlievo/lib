@@ -162,11 +162,13 @@ RUN chmod 644 /etc/logrotate.d/elasticsearch \
 
 ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 
-### install redis
+###############################################################################
+#                      install redis dotnet nodejs pm2
+###############################################################################
 
 ENV TZ=Asia/Shanghai
-### ENV LC_ALL=zh_CN.UTF-8
 
+# redis
 ENV REDIS_HOME /opt/redis
 ENV REDIS_PACKAGE redis-stable.tar.gz
 
@@ -186,12 +188,14 @@ EXPOSE 6379
 COPY redis/redis.sh /usr/local/bin/redis.sh
 RUN chmod +x /usr/local/bin/redis.sh
 
+# dotnet
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
 RUN apt-get install apt-transport-https
 RUN apt-get update
 RUN apt-get install -y dotnet-sdk-2.2
 
+# nodejs pm2
 RUN apt-get install -y python-software-properties
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash  -
 RUN apt-get install -y nodejs

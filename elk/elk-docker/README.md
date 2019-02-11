@@ -1,3 +1,5 @@
+docker run --restart=always --privileged=true -u root -v /root/workspace/elk-data:/var/lib/elasticsearch -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 6000:6379 -itd --name elk xlievo/elk:latest
+
 # Elasticsearch, Logstash, Kibana (ELK) Docker image
 
 [![](https://images.microbadger.com/badges/image/sebp/elk.svg)](https://microbadger.com/images/sebp/elk "Get your own image badge on microbadger.com") [![Documentation Status](https://readthedocs.org/projects/elk-docker/badge/?version=latest)](http://elk-docker.readthedocs.io/?badge=latest)
