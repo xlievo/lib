@@ -163,7 +163,7 @@ RUN chmod 644 /etc/logrotate.d/elasticsearch \
 ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 
 ###############################################################################
-#                      install redis dotnet nodejs pm2 crontab
+#                      install redis dotnet nodejs pm2
 ###############################################################################
 
 ENV TZ=Asia/Shanghai
@@ -192,9 +192,9 @@ RUN chmod +x /usr/local/bin/redis.sh
 # dotnet
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
-RUN apt-get install apt-transport-https
+RUN apt-get install -y apt-transport-https
 RUN apt-get update
-RUN apt-get install aspnetcore-runtime-2.2
+RUN apt-get install -y aspnetcore-runtime-2.2
 
 # nodejs pm2
 RUN apt-get install -y python-software-properties
