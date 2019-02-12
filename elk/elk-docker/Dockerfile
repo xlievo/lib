@@ -193,7 +193,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
 RUN dpkg -i packages-microsoft-prod.deb
 RUN apt-get install apt-transport-https
 RUN apt-get update
-RUN apt-get install -y dotnet-sdk-2.2
+RUN apt-get install aspnetcore-runtime-2.2
 
 # nodejs pm2
 RUN apt-get install -y python-software-properties
