@@ -163,10 +163,11 @@ RUN chmod 644 /etc/logrotate.d/elasticsearch \
 ADD ./kibana.yml ${KIBANA_HOME}/config/kibana.yml
 
 ###############################################################################
-#                      install redis dotnet nodejs pm2
+#                      install redis dotnet nodejs pm2 crontab
 ###############################################################################
 
 ENV TZ=Asia/Shanghai
+ENV LC_ALL C.UTF-8
 
 # redis
 ENV REDIS_HOME /opt/redis
@@ -202,7 +203,10 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 RUN npm install pm2@latest -g
 
-RUN apt-get clean
+# crontab
+RUN apt-get install -y cron
+
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean
 
 ###############################################################################
 #                                   START

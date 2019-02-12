@@ -6,6 +6,7 @@ docker run --restart=always --privileged=true -u root -v /root/workspace/elk-dat
 ###############################################################################
 
 ENV TZ=Asia/Shanghai
+ENV LC_ALL C.UTF-8
 
 # redis
 ENV REDIS_HOME /opt/redis
@@ -41,4 +42,7 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 RUN npm install pm2@latest -g
 
-RUN apt-get clean
+# crontab
+RUN apt-get install -y cron
+
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean
