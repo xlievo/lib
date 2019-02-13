@@ -42,7 +42,27 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 RUN npm install pm2@latest -g
 
+### install Filebeat
+#https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-getting-started.html
+ENV FILEBEAT_VERSION ${ELK_VERSION}
+ENV FILEBEAT_HOME /opt/filebeat
+ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-linux-x86_64.tar.gz
+ENV FILEBEAT_GID 994
+ENV FILEBEAT_UID 994
+
+RUN mkdir ${FILEBEAT_HOME} \
+ && curl -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
+ && tar xzf ${FILEBEAT_PACKAGE} -C ${FILEBEAT_HOME} --strip-components=1 \
+ && rm -f ${FILEBEAT_PACKAGE} \
+ && groupadd -r filebeat -g ${FILEBEAT_GID} \
+ && useradd -r -s /usr/sbin/nologin -d ${FILEBEAT_HOME} -c "Filebeat service user" -u ${FILEBEAT_UID} -g filebeat filebeat \
+ && mkdir -p /var/log/filebeat \
+ && chown -R filebeat:filebeat ${FILEBEAT_HOME} /var/log/filebeat
+
+# icu
+#RUN apt-get install -y libicu-dev
+
 # crontab
-RUN apt-get install -y cron
+#RUN apt-get install -y cron
 
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean
