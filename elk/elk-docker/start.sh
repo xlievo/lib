@@ -18,6 +18,7 @@ _term() {
   service elasticsearch stop
   service logstash stop
   service kibana stop
+  service filebeat stop
   exit 0
 }
 
@@ -238,6 +239,7 @@ if [ -x /usr/local/bin/elk-post-hooks.sh ]; then
   . /usr/local/bin/elk-post-hooks.sh
 fi
 
+service filebeat start
 
 touch $OUTPUT_LOGFILES
 tail -f $OUTPUT_LOGFILES &
