@@ -59,8 +59,7 @@ RUN wget -q https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PAC
  
 RUN filebeat modules enable postgresql \
  && mkdir -p /var/lib/log/postgresql \
- && sed -i 's/^    #var.paths:/    var.paths: ["\/var\/lib\/log\/postgresql\/\*.log\*"]/g' /etc/filebeat/modules.d/postgresql.yml \
- && filebeat setup -e
+ && sed -i 's/^    #var.paths:/    var.paths: ["\/var\/lib\/log\/postgresql\/\*.log\*"]/g' /etc/filebeat/modules.d/postgresql.yml
 
 # service filebeat stop
 # service filebeat start

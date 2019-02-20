@@ -239,6 +239,7 @@ if [ -x /usr/local/bin/elk-post-hooks.sh ]; then
   . /usr/local/bin/elk-post-hooks.sh
 fi
 
+filebeat setup -e
 service filebeat start
 
 touch $OUTPUT_LOGFILES
