@@ -42,7 +42,7 @@ RUN curl -sL https://deb.nodesource.com/setup_11.x | bash  -
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 RUN npm install pm2@latest -g
-RUN ln -s /usr/local/bin
+#RUN ln -s /usr/local/bin
 
 ### install Filebeat
 
