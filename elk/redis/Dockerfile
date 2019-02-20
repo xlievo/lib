@@ -52,12 +52,14 @@ ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-amd64.deb
 
 RUN wget -q https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
  && dpkg -i ${FILEBEAT_PACKAGE} \
- && rm -f ${FILEBEAT_PACKAGE}
+ && rm -f ${FILEBEAT_PACKAGE} \
+ && mkdir -p /var/lib/log \
+ && sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
+ && sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/log\/\*.log/g' /etc/filebeat/filebeat.yml
 
-RUN filebeat modules enable postgresql \
- && filebeat modules enable mysql \
- && filebeat modules enable nginx \
- && filebeat modules enable system
+# service filebeat stop
+# service filebeat start
+# sh /usr/local/bin/redis.sh
 
 # icu
 #RUN apt-get install -y libicu-dev

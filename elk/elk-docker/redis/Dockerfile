@@ -34,6 +34,7 @@ RUN dpkg -i packages-microsoft-prod.deb
 RUN apt-get install -y apt-transport-https
 RUN apt-get update
 RUN apt-get install -y aspnetcore-runtime-2.2
+RUN rm -f packages-microsoft-prod.deb
 
 # nodejs pm2
 RUN apt-get install -y python-software-properties
@@ -41,23 +42,24 @@ RUN curl -sL https://deb.nodesource.com/setup_11.x | bash  -
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 RUN npm install pm2@latest -g
+#RUN ln -s /usr/local/bin
 
 ### install Filebeat
-#https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-getting-started.html
-ENV FILEBEAT_VERSION ${ELK_VERSION}
-ENV FILEBEAT_HOME /opt/filebeat
-ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-linux-x86_64.tar.gz
-ENV FILEBEAT_GID 994
-ENV FILEBEAT_UID 994
 
-RUN mkdir ${FILEBEAT_HOME} \
- && curl -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
- && tar xzf ${FILEBEAT_PACKAGE} -C ${FILEBEAT_HOME} --strip-components=1 \
+##https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-getting-started.html
+ENV FILEBEAT_VERSION ${ELK_VERSION}
+ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-amd64.deb
+
+RUN wget -q https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
+ && dpkg -i ${FILEBEAT_PACKAGE} \
  && rm -f ${FILEBEAT_PACKAGE} \
- && groupadd -r filebeat -g ${FILEBEAT_GID} \
- && useradd -r -s /usr/sbin/nologin -d ${FILEBEAT_HOME} -c "Filebeat service user" -u ${FILEBEAT_UID} -g filebeat filebeat \
- && mkdir -p /var/log/filebeat \
- && chown -R filebeat:filebeat ${FILEBEAT_HOME} /var/log/filebeat
+ && mkdir -p /var/lib/log \
+ && sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
+ && sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/log\/\*.log/g' /etc/filebeat/filebeat.yml
+
+# service filebeat stop
+# service filebeat start
+# sh /usr/local/bin/redis.sh
 
 # icu
 #RUN apt-get install -y libicu-dev
