@@ -50,7 +50,7 @@ RUN npm install pm2@latest -g
 ENV FILEBEAT_VERSION ${ELK_VERSION}
 ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-amd64.deb
 
-RUN wget -q https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
+RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
  && dpkg -i ${FILEBEAT_PACKAGE} \
  && rm -f ${FILEBEAT_PACKAGE} \
  && mkdir -p /var/lib/log/logs \
@@ -63,6 +63,7 @@ RUN filebeat modules enable postgresql \
 
 # service filebeat stop
 # service filebeat start
+# filebeat setup -e
 # sh /usr/local/bin/redis.sh
 
 # icu

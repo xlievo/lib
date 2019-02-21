@@ -240,7 +240,7 @@ if [ -x /usr/local/bin/elk-post-hooks.sh ]; then
 fi
 
 service filebeat start
-filebeat setup -e
+# filebeat setup -e
 
 touch $OUTPUT_LOGFILES
 tail -f $OUTPUT_LOGFILES &
