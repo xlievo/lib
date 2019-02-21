@@ -12,7 +12,7 @@ ENV LC_ALL C.UTF-8
 ENV REDIS_HOME /opt/redis
 ENV REDIS_PACKAGE redis-stable.tar.gz
 
-RUN apt-get install -y gcc make wget \
+RUN apt-get install -y gcc make \
  && mkdir ${REDIS_HOME} \
  && curl -O http://download.redis.io/releases/${REDIS_PACKAGE} \
  && tar xzf ${REDIS_PACKAGE} -C ${REDIS_HOME} --strip-components=1 \
@@ -29,7 +29,7 @@ COPY redis/redis.sh /usr/local/bin/redis.sh
 RUN chmod +x /usr/local/bin/redis.sh
 
 # dotnet
-RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+RUN curl -L -O https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
 RUN apt-get install -y apt-transport-https
 RUN apt-get update
