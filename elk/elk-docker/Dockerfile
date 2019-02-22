@@ -214,9 +214,11 @@ ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-amd64.deb
 RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
  && dpkg -i ${FILEBEAT_PACKAGE} \
  && rm -f ${FILEBEAT_PACKAGE} \
- && mkdir -p /etc/filebeat/log \
- && sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
- && sed -i 's/^    - \/var\/log\/\*.log/    - \/etc\/filebeat\/log\/\*.log/g' /etc/filebeat/filebeat.yml
+ && mv /etc/filebeat /var/lib/elasticsearch/filebeat && rm -rf /etc/filebeat
+ && ln -sf /var/lib/elasticsearch/filebeat /etc/
+ && mkdir -p /var/lib/elasticsearch/filebeat/log \
+ && sed -i 's/^  enabled: false/  enabled: true/g' /var/lib/elasticsearch/filebeat/filebeat.yml \
+ && sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/elasticsearch\/filebeat\/log\/\*.log/g' /var/lib/elasticsearch/filebeat/filebeat.yml
  #&& mkdir -p /var/lib/log/logs \
  #&& sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
  #&& sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/log\/logs\/\*.log/g' /etc/filebeat/filebeat.yml
@@ -224,10 +226,8 @@ RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_
 RUN filebeat modules enable postgresql \
  && filebeat modules enable redis \
  && filebeat modules enable haproxy \
- && mkdir -p /etc/filebeat/postgresql \
- && sed -i 's/^    #var.paths:/    var.paths: ["\/etc\/filebeat\/postgresql\/\*.log\*"]/g' /etc/filebeat/modules.d/postgresql.yml
-
-VOLUME /etc/filebeat
+ && mkdir -p /var/lib/elasticsearch/filebeat/postgresql \
+ && sed -i 's/^    #var.paths:/    var.paths: ["\/var\/lib\/elasticsearch\/filebeat\/postgresql\/\*.log\*"]/g' /var/lib/elasticsearch/filebeat/modules.d/postgresql.yml
 
 # service filebeat stop
 # service filebeat start
