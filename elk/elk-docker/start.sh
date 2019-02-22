@@ -239,6 +239,10 @@ if [ -x /usr/local/bin/elk-post-hooks.sh ]; then
   . /usr/local/bin/elk-post-hooks.sh
 fi
 
+# filebeat
+if [ ! -f "/etc/filebeat/filebeat.yml" ]; then
+ cp -rf /opt/filebeat /etc/
+fi
 service filebeat start
 # filebeat setup -e
 
