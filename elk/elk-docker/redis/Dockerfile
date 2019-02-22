@@ -57,7 +57,7 @@ RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_
  #&& mv /etc/filebeat ${FILEBEAT_HOME} && rm -rf /etc/filebeat && ln -s ${FILEBEAT_HOME} /etc/filebeat \
  && mkdir -p ${FILEBEAT_HOME}/log \
  && sed -i 's/^  enabled: false/  enabled: true/g' ${FILEBEAT_HOME}/filebeat.yml \
- && sed -i 's/^    - \/var\/log\/\*.log/    - ${FILEBEAT_HOME}\/log\/\*.log/g' ${FILEBEAT_HOME}/filebeat.yml
+ && sed -i 's/^    - \/var\/log\/\*.log/    - \/etc\/filebeat\/log\/\*.log/g' ${FILEBEAT_HOME}/filebeat.yml
  
  #&& mkdir -p /var/lib/log/logs \
  #&& sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
