@@ -53,13 +53,20 @@ ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-amd64.deb
 RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
  && dpkg -i ${FILEBEAT_PACKAGE} \
  && rm -f ${FILEBEAT_PACKAGE} \
- && mkdir -p /var/lib/log/logs \
+ && mkdir -p /etc/filebeat/log \
  && sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
- && sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/log\/logs\/\*.log/g' /etc/filebeat/filebeat.yml
+ && sed -i 's/^    - \/var\/log\/\*.log/    - \/etc\/filebeat\/log\/\*.log/g' /etc/filebeat/filebeat.yml
+ #&& mkdir -p /var/lib/log/logs \
+ #&& sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
+ #&& sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/log\/logs\/\*.log/g' /etc/filebeat/filebeat.yml
  
 RUN filebeat modules enable postgresql \
- && mkdir -p /var/lib/log/postgresql \
- && sed -i 's/^    #var.paths:/    var.paths: ["\/var\/lib\/log\/postgresql\/\*.log\*"]/g' /etc/filebeat/modules.d/postgresql.yml
+ && filebeat modules enable redis \
+ && filebeat modules enable haproxy \
+ && mkdir -p /etc/filebeat/postgresql \
+ && sed -i 's/^    #var.paths:/    var.paths: ["\/etc\/filebeat\/postgresql\/\*.log\*"]/g' /etc/filebeat/modules.d/postgresql.yml
+
+VOLUME /etc/filebeat
 
 # service filebeat stop
 # service filebeat start
