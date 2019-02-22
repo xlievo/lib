@@ -241,8 +241,18 @@ fi
 
 # filebeat
 if [ ! -f "/etc/filebeat/filebeat.yml" ]; then
- cp -rf /opt/filebeat /etc/
+ cp -f /opt/filebeat/filebeat.yml /etc/filebeat/
 fi
+if [ ! -f "/etc/filebeat/fields.yml" ]; then
+ cp -f /opt/filebeat/fields.yml /etc/filebeat/
+fi
+if [ ! -f "/etc/filebeat/filebeat.reference.yml" ]; then
+ cp -f /opt/filebeat/filebeat.reference.yml /etc/filebeat/
+fi
+if [ ! -d "/etc/filebeat/modules.d" ]; then
+ cp -rf /opt/filebeat/modules.d /etc/filebeat/
+fi
+
 service filebeat start
 # filebeat setup -e
 
