@@ -59,17 +59,15 @@ RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_
  && sed -i 's/^  enabled: false/  enabled: true/g' ${FILEBEAT_HOME}/filebeat.yml \
  && sed -i 's/^    - \/var\/log\/\*.log/    - ${FILEBEAT_HOME}\/log\/\*.log/g' ${FILEBEAT_HOME}/filebeat.yml
  
- VOLUME ${FILEBEAT_HOME}
  #&& mkdir -p /var/lib/log/logs \
  #&& sed -i 's/^  enabled: false/  enabled: true/g' /etc/filebeat/filebeat.yml \
  #&& sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/log\/logs\/\*.log/g' /etc/filebeat/filebeat.yml
  
-RUN filebeat modules enable postgresql \
- && filebeat modules enable redis \
- && filebeat modules enable haproxy \
+RUN filebeat modules enable postgresql && filebeat modules enable redis && filebeat modules enable haproxy \
  && mkdir -p ${FILEBEAT_HOME}/postgresql && mkdir -p ${FILEBEAT_HOME}/redis && mkdir -p ${FILEBEAT_HOME}/haproxy \
  && sed -i 's/^    #var.paths:/    var.paths: ["${FILEBEAT_HOME}\/postgresql\/\*.log\*"]/g' ${FILEBEAT_HOME}/modules.d/postgresql.yml
 
+VOLUME ${FILEBEAT_HOME}
 # service filebeat stop
 # service filebeat start
 # filebeat setup -e
