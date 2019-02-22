@@ -214,8 +214,8 @@ ENV FILEBEAT_PACKAGE filebeat-${FILEBEAT_VERSION}-amd64.deb
 RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_PACKAGE} \
  && dpkg -i ${FILEBEAT_PACKAGE} \
  && rm -f ${FILEBEAT_PACKAGE} \
- && mv /etc/filebeat /var/lib/elasticsearch/filebeat && rm -rf /etc/filebeat
- && ln -sf /var/lib/elasticsearch/filebeat /etc/
+ && mv /etc/filebeat /var/lib/elasticsearch/filebeat && rm -rf /etc/filebeat \
+ && ln -s /var/lib/elasticsearch/filebeat /etc/filebeat \
  && mkdir -p /var/lib/elasticsearch/filebeat/log \
  && sed -i 's/^  enabled: false/  enabled: true/g' /var/lib/elasticsearch/filebeat/filebeat.yml \
  && sed -i 's/^    - \/var\/log\/\*.log/    - \/var\/lib\/elasticsearch\/filebeat\/log\/\*.log/g' /var/lib/elasticsearch/filebeat/filebeat.yml
