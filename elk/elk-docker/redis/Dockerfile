@@ -2,7 +2,7 @@
 docker run --restart=always --privileged=true -u root -v /root/workspace/elk-data:/var/lib/elasticsearch -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 6000:6379 -itd --name elk xlievo/elk:latest
 
 ###############################################################################
-#                      install redis dotnet nodejs pm2
+#                      install redis dotnet filebeat nodejs pm2
 ###############################################################################
 
 ENV TZ=Asia/Shanghai
@@ -55,7 +55,7 @@ RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/${FILEBEAT_
  && dpkg -i ${FILEBEAT_PACKAGE} \
  && rm -f ${FILEBEAT_PACKAGE} \
  && mkdir -p ${FILEBEAT_HOME}/log && mkdir -p ${FILEBEAT_HOME}/postgresql && mkdir -p ${FILEBEAT_HOME}/redis && mkdir -p ${FILEBEAT_HOME}/haproxy \
- && filebeat modules enable postgresql && filebeat modules enable redis && filebeat modules enable haproxy \
+ && filebeat modules enable postgresql \
  && sed -i 's/^  enabled: false/  enabled: true/g' ${FILEBEAT_HOME}/filebeat.yml \
  && sed -i 's/^    - \/var\/log\/\*.log/    - \/etc\/filebeat\/log\/\*.log/g' ${FILEBEAT_HOME}/filebeat.yml \
  && sed -i 's/^    #var.paths:/    var.paths: ["\/etc\/filebeat\/postgresql\/\*.log\*"]/g' ${FILEBEAT_HOME}/modules.d/postgresql.yml

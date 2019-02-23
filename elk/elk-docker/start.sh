@@ -252,7 +252,12 @@ fi
 if [ ! -d "/etc/filebeat/modules.d" ]; then
  cp -rf /opt/filebeat/modules.d /etc/filebeat/
 fi
-
+if [ ! -d "/etc/filebeat/postgresql" ]; then
+ cp -rf /opt/filebeat/postgresql /etc/filebeat/
+fi
+if [ ! -d "/etc/filebeat/log" ]; then
+ cp -rf /opt/filebeat/log /etc/filebeat/
+fi
 service filebeat start
 # filebeat setup -e
 
