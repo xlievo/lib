@@ -160,13 +160,6 @@ RUN set -eux; \
 	sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample; \
 	grep -F "listen_addresses = '*'" /usr/share/postgresql/postgresql.conf.sample
 
-RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
-
-ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
-ENV PGDATA /var/lib/postgresql/data
-RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
-VOLUME /var/lib/postgresql/data
-
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
   && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
@@ -189,6 +182,13 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
  && sed -i 's/^#log_min_error_statement = error/log_min_error_statement = error/g' $CONF \
  && sed -i 's/^#log_line_prefix = '\''%m \[%p\] '\''/log_line_prefix = '\''%m \[%p\] %q%u@%d '\''/g' $CONF \
  && sed -i 's/^log_timezone = '\''UTC'\''/log_timezone = '\''Asia\/Shanghai'\''/g' $CONF
+
+RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
+
+ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
+ENV PGDATA /var/lib/postgresql/data
+RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
+VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
