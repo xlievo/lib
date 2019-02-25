@@ -175,7 +175,7 @@ COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
   && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
 
-ENV CONF $PGDATA/postgresql.conf
+ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
 RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\''/g' $CONF \
  && sed -i 's/^#logging_collector = off/logging_collector = on/g' $CONF \
