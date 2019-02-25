@@ -1,11 +1,6 @@
 # vim:set ft=dockerfile:
 FROM alpine:3.9
 
-RUN cat /dev/null > /etc/apk/repositories
-RUN echo "http://mirrors.aliyun.com/alpine/v3.9/main/" >> /etc/apk/repositories
-RUN echo "http://mirrors.aliyun.com/alpine/v3.9/community/" >> /etc/apk/repositories
-RUN apk update
-
 # alpine includes "postgres" user/group in base install
 #   /etc/passwd:22:postgres:x:70:70::/var/lib/postgresql:/bin/sh
 #   /etc/group:34:postgres:x:70:
@@ -23,13 +18,12 @@ RUN set -ex; \
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
 # alpine doesn't require explicit locale-file generation
 ENV LANG en_US.utf8
-ENV TZ=Asia/Shanghai
 
 RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PG_MAJOR 10
-ENV PG_VERSION 10.6
-ENV PG_SHA256 68a8276f08bda8fbefe562faaf8831cb20664a7a1d3ffdbbcc5b83e08637624b
+ENV PG_VERSION 10.7
+ENV PG_SHA256 bfed1065380c1bba927bfe51f23168471373f26e3324cbad859269cc32733ede
 
 RUN set -ex \
 	\
@@ -38,7 +32,7 @@ RUN set -ex \
 		openssl \
 		tar \
 	\
-	&& wget -O postgresql.tar.bz2 "http://mirrors.ustc.edu.cn/postgresql/source/v$PG_VERSION/postgresql-$PG_VERSION.tar.bz2" \
+	&& wget -O postgresql.tar.bz2 "https://ftp.postgresql.org/pub/source/v$PG_VERSION/postgresql-$PG_VERSION.tar.bz2" \
 	&& echo "$PG_SHA256 *postgresql.tar.bz2" | sha256sum -c - \
 	&& mkdir -p /usr/src/postgresql \
 	&& tar \
@@ -73,7 +67,6 @@ RUN set -ex \
 		util-linux-dev \
 		zlib-dev \
 		icu-dev \
-		libcurl \
 	\
 	&& cd /usr/src/postgresql \
 # update "DEFAULT_PGSOCKET_DIR" to "/var/run/postgresql" (matching Debian)
@@ -152,7 +145,6 @@ RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PG
 VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]
 

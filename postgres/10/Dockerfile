@@ -1,20 +1,5 @@
-﻿# vim:set ft=dockerfile:
+# vim:set ft=dockerfile:
 FROM debian:stretch-slim
-
-#RUN cat /dev/null > /etc/apt/sources.list
-#RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >> /etc/apt/sources.list
-#RUN echo "deb-src http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >> /etc/apt/sources.list
-#RUN echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main" >> /etc/apt/sources.list
-#RUN echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main" >> /etc/apt/sources.list
-#RUN echo "deb http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib" >> /etc/apt/sources.list
-#RUN echo "deb-src http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib" >> /etc/apt/sources.list
-#RUN echo "deb http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib" >> /etc/apt/sources.list
-#RUN echo "deb-src http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib" >> /etc/apt/sources.list
-#RUN apt-get update
-#
-#RUN apt-get install -y libcurl4-gnutls-dev
-#RUN apt-get install -y libcurl4-nss-dev
-#RUN apt-get install -y libcurl4-openssl-dev
 
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
@@ -43,7 +28,6 @@ RUN set -x \
 	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
 	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	#&& gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
 	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
 	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
 	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
@@ -80,14 +64,14 @@ RUN set -ex; \
 # uid                  PostgreSQL Debian Repository
 	key='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8'; \
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "$key"; \
+	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/postgres.gpg; \
 	command -v gpgconf > /dev/null && gpgconf --kill all; \
 	rm -rf "$GNUPGHOME"; \
 	apt-key list
 
 ENV PG_MAJOR 10
-ENV PG_VERSION 10.6-1.pgdg90+1
+ENV PG_VERSION 10.7-1.pgdg90+1
 
 RUN set -ex; \
 	\
@@ -98,14 +82,12 @@ RUN set -ex; \
 	case "$dpkgArch" in \
 		amd64|i386|ppc64el) \
 # arches officialy built by upstream
-			#echo "deb http://mirrors.ustc.edu.cn/postgresql/repos/apt/ stretch-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg.list; \
 			echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg.list; \
 			apt-get update; \
 			;; \
 		*) \
 # we're on an architecture upstream doesn't officially build for
 # let's build binaries from their published source packages
-			#echo "deb-src http://mirrors.ustc.edu.cn/postgresql/repos/apt/ stretch-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg.list; \
 			echo "deb-src http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main $PG_MAJOR" > /etc/apt/sources.list.d/pgdg.list; \
 			\
 			case "$PG_MAJOR" in \
@@ -186,7 +168,6 @@ RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PG
 VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]
 
