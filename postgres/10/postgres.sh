@@ -21,6 +21,4 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
  && sed -i 's/^#log_duration = off/log_duration = on/g' $CONF \
  && sed -i 's/^#log_min_messages = warning/log_min_messages = warning/g' $CONF \
  && sed -i 's/^#log_min_error_statement = error/log_min_error_statement = error/g' $CONF \
- && sed -i 's/^#log_line_prefix = '\''%m \[%p\] '\''/log_line_prefix = '\''%m \[%p\] %q%u@%d '\''/g' $CONF \
- && sed -i 's/^timezone = '\''UTC'\''/timezone = '\''Asia\/Shanghai'\''/g' $CONF \
- && sed -i 's/^log_timezone = '\''UTC'\''/log_timezone = '\''Asia\/Shanghai'\''/g' $CONF
+ && sed -i 's/^#log_line_prefix = '\''%m \[%p\] '\''/log_line_prefix = '\''%m \[%p\] %q%u@%d '\''/g' $CONF
