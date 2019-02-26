@@ -1,6 +1,9 @@
 # vim:set ft=dockerfile:
 FROM debian:stretch-slim
 
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
 		apt-get update; \
@@ -175,9 +178,6 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
   && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
-
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
