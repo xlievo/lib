@@ -201,5 +201,10 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
  && sed -i 's/^#log_min_error_statement = error/log_min_error_statement = error/g' $CONF \
  && sed -i 's/^#log_line_prefix = '\''%m \[%p\] '\''/log_line_prefix = '\''%m \[%p\] %q%u@%d '\''/g' $CONF
 
+RUN sed -i 's/^shared_buffers = 128MB/shared_buffers = 512MB/g' $CONF \
+ && sed -i 's/^max_connections = 100/max_connections = 1000/g' $CONF
+
+COPY init.sh /docker-entrypoint-initdb.d/
+
 EXPOSE 5432
 CMD ["postgres"]
