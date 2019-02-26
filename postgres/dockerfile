@@ -1,10 +1,11 @@
-# zombodb
+FROM postgres:10.7
+
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
   && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
-
-# Log
 
 ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
@@ -32,16 +33,11 @@ RUN sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
  && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
  && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
- && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF
+ && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF \
+ && sed -i 's/^#hot_standby = on/hot_standby = on/g' $CONF \
+ && sed -i 's/^#max_standby_streaming_delay = 30s/max_standby_streaming_delay = 30s/g' $CONF \
+ && sed -i 's/^#wal_receiver_status_interval = 10s/wal_receiver_status_interval = 10s/g' $CONF \
+ && sed -i 's/^#hot_standby_feedback = off/hot_standby_feedback = on/g' $CONF
 
-
-# create replication role
-
-p=`openssl rand -hex 8 | cut -c 1-8`
-
-psql -v ON_ERROR_STOP=1 <<-EOSQL
-    create role replica login replication encrypted password '$p'; 
-EOSQL
-
-echo 'replica' $p
+COPY init.sh /docker-entrypoint-initdb.d/
 
