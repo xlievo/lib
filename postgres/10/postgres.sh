@@ -32,13 +32,16 @@ RUN sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
  && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
  && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
- && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF \
- && sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
- && sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
- && sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
+ && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF
 
+
+# create replication role
+
+p=`openssl rand -hex 8 | cut -c 1-8`
 
 psql -v ON_ERROR_STOP=1 <<-EOSQL
-    create role replica login replication encrypted password 'replica'; 
+    create role replica login replication encrypted password '$p'; 
 EOSQL
+
+echo 'replica' $p
 

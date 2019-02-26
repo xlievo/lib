@@ -204,6 +204,13 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
 RUN sed -i 's/^shared_buffers = 128MB/shared_buffers = 512MB/g' $CONF \
  && sed -i 's/^max_connections = 100/max_connections = 1000/g' $CONF
 
+RUN sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
+ && sed -i 's/^#archive_command = '\'''\''/archive_command = '\''cp %p \/var\/lib\/postgresql\/data\/pg_archive\/%f'\''/g' $CONF \
+ && sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
+ && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
+ && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
+ && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF
+
 COPY init.sh /docker-entrypoint-initdb.d/
 
 EXPOSE 5432
