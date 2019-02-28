@@ -4,8 +4,12 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
  
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
-RUN dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
-  && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
+RUN apt-get update \
+ && apt-get install -y libcurl4-openssl-dev \
+ && apt-get install -y libcurl4-nss-dev \
+ && apt-get install -y libcurl4-gnutls-dev \
+ && dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
+ && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
 
 ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
@@ -25,8 +29,8 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
  && sed -i 's/^#log_min_error_statement = error/log_min_error_statement = error/g' $CONF \
  && sed -i 's/^#log_line_prefix = '\''%m \[%p\] '\''/log_line_prefix = '\''%m \[%p\] %q%u@%d '\''/g' $CONF
 
-RUN sed -i 's/^shared_buffers = 128MB/shared_buffers = 512MB/g' $CONF \
- && sed -i 's/^max_connections = 100/max_connections = 1000/g' $CONF
+#RUN sed -i 's/^shared_buffers = 128MB/shared_buffers = 512MB/g' $CONF \
+# && sed -i 's/^max_connections = 100/max_connections = 1000/g' $CONF
 
 RUN sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#archive_command = '\'''\''/archive_command = '\''cp %p \/var\/lib\/postgresql\/data\/pg_archive\/%f'\''/g' $CONF \
