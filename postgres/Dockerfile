@@ -2,7 +2,7 @@ FROM postgres:10.7
 
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
+ 
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
   && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
@@ -40,3 +40,6 @@ RUN sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#hot_standby_feedback = off/hot_standby_feedback = on/g' $CONF
 
 COPY init.sh /docker-entrypoint-initdb.d/
+COPY recovery.conf /docker-entrypoint-initdb.d
+RUN chown postgres:postgres /docker-entrypoint-initdb.d/recovery.conf \
+ && chown postgres:root /root
