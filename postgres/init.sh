@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p /var/lib/postgresql/data/pg_archive
+
 p=`openssl rand -hex 8 | cut -c 1-8`
 
 psql -v ON_ERROR_STOP=1 --username="$POSTGRES_USER" <<-EOSQL
@@ -17,6 +19,7 @@ echo "SHOST="${SHOST} "SPORT="${SPORT} "SPASSWORD="${SPASSWORD}
 export PGPASSWORD=${SPASSWORD}
 rm -rf /var/lib/postgresql/data/*
 pg_basebackup -h ${SHOST} -p ${SPORT} -U replica -D /var/lib/postgresql/data -X stream -P
+mkdir -p /var/lib/postgresql/data/pg_archive
 mkdir -p /var/lib/postgresql/data/pg_archive
 cp /docker-entrypoint-initdb.d/recovery.conf /var/lib/postgresql/data/
 sed -i "s/\${SHOST}/"${SHOST}"/" /var/lib/postgresql/data/recovery.conf
