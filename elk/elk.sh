@@ -21,7 +21,7 @@ ulimit -a
 docker build -t elk:1.0 .
 
 docker run --restart=always --privileged=true -u root -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 6000:6379 -itd --name elk elk:1.0
-docker run --restart=always --privileged=true -u root -v /root/workspace/elk-data:/var/lib/elasticsearch -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 6000:6379 -itd --name elk xlievo/elk:latest
+docker run --restart=always --privileged=true -u root -v /root/workspace/elk-data:/var/lib/elasticsearch -v /root/workspace/filebeat:/etc/filebeat -v /root/workspace/db/log:/etc/filebeat/postgresql -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 6000:6379 -itd --name elk test:latest
 
 docker exec -it elk bash
 
