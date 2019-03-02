@@ -1,4 +1,4 @@
-FROM postgres:10.7
+FROM postgres:10.6
 
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -19,18 +19,18 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
  && sed -i 's/^#log_filename/log_filename/g' $CONF \
  && sed -i 's/^#log_rotation_age = 1d/log_rotation_age = 1d/g' $CONF \
  && sed -i 's/^#log_rotation_size = 10MB/log_rotation_size = 100MB/g' $CONF \
- && sed -i 's/^#log_error_verbosity = default/log_error_verbosity = verbose/g' $CONF \
+ #&& sed -i 's/^#log_error_verbosity = default/log_error_verbosity = verbose/g' $CONF \
  && sed -i 's/^#log_statement = '\''none'\''/log_statement = '\''mod'\''/g' $CONF \
  && sed -i 's/^#log_lock_waits = off/log_lock_waits = on/g' $CONF \
- && sed -i 's/^#log_min_duration_statement = -1/log_min_duration_statement = 1000/g' $CONF \
+ && sed -i 's/^#log_min_duration_statement = -1/log_min_duration_statement = 0/g' $CONF \
  && sed -i 's/^#log_checkpoints = off/log_checkpoints = on/g' $CONF \
  && sed -i 's/^#log_duration = off/log_duration = on/g' $CONF \
  && sed -i 's/^#log_min_messages = warning/log_min_messages = warning/g' $CONF \
  && sed -i 's/^#log_min_error_statement = error/log_min_error_statement = error/g' $CONF \
  && sed -i 's/^#log_line_prefix = '\''%m \[%p\] '\''/log_line_prefix = '\''%m \[%p\] %q%u@%d '\''/g' $CONF
 
-#RUN sed -i 's/^shared_buffers = 128MB/shared_buffers = 512MB/g' $CONF \
-# && sed -i 's/^max_connections = 100/max_connections = 1000/g' $CONF
+#RUN sed -i 's/^shared_buffers = 128MB/shared_buffers = 512MB/g' $CONF && sed -i 's/^max_connections = 100/max_connections = 1000/g' $CONF
+# -c 'shared_buffers=256MB' -c 'max_connections=1000'
 
 RUN sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#archive_command = '\'''\''/archive_command = '\''cp %p \/var\/lib\/postgresql\/data\/pg_archive\/%f'\''/g' $CONF \

@@ -20,7 +20,6 @@ export PGPASSWORD=${SPASSWORD}
 rm -rf /var/lib/postgresql/data/*
 pg_basebackup -h ${SHOST} -p ${SPORT} -U replica -D /var/lib/postgresql/data -X stream -P
 mkdir -p /var/lib/postgresql/data/pg_archive
-mkdir -p /var/lib/postgresql/data/pg_archive
 cp /docker-entrypoint-initdb.d/recovery.conf /var/lib/postgresql/data/
 sed -i "s/\${SHOST}/"${SHOST}"/" /var/lib/postgresql/data/recovery.conf
 sed -i "s/\${SPORT}/"${SPORT}"/" /var/lib/postgresql/data/recovery.conf
