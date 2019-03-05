@@ -28,3 +28,8 @@ echo "slave OK !"
 fi
 
 pg_ctl restart
+# apt-get -y install postgresql-10-cron
+#sed -i "s/exit 101/exit 0/" /usr/sbin/policy-rc.d
+#update-rc.d cron defaults 99 update-rc.d cron start 20 2 3 4 5 6. stop 80 0 1 6 .
+# service cron status
+#crontab crontab.txt
