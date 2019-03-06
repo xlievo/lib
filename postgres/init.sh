@@ -1,6 +1,9 @@
 #!/bin/bash
 
-mkdir -p /var/lib/postgresql/data/pg_archive
+DATA=/var/lib/postgresql/data
+
+mkdir -p $DATA/pg_archive
+#mkdir -p $DATA/log
 
 p=`openssl rand -hex 8 | cut -c 1-8`
 
@@ -10,26 +13,29 @@ EOSQL
 
 echo 'master replica password '$p
 
-echo 'host replication replica 0.0.0.0/0 md5' >> /var/lib/postgresql/data/pg_hba.conf
+echo 'host replication replica 0.0.0.0/0 md5' >> $DATA/pg_hba.conf
 # SHOST SPORT SPASSWORD
 if [ -z $SPASSWORD ]; then
 echo "master OK !"
 else
 echo "SHOST="${SHOST} "SPORT="${SPORT} "SPASSWORD="${SPASSWORD}
 export PGPASSWORD=${SPASSWORD}
-rm -rf /var/lib/postgresql/data/*
-pg_basebackup -h ${SHOST} -p ${SPORT} -U replica -D /var/lib/postgresql/data -X stream -P
-mkdir -p /var/lib/postgresql/data/pg_archive
-cp /docker-entrypoint-initdb.d/recovery.conf /var/lib/postgresql/data/
-sed -i "s/\${SHOST}/"${SHOST}"/" /var/lib/postgresql/data/recovery.conf
-sed -i "s/\${SPORT}/"${SPORT}"/" /var/lib/postgresql/data/recovery.conf
-sed -i "s/\${SPASSWORD}/"${SPASSWORD}"/" /var/lib/postgresql/data/recovery.conf
+rm -rf $DATA/*
+pg_basebackup -h ${SHOST} -p ${SPORT} -U replica -D $DATA -X stream -P
+mkdir -p $DATA/pg_archive
+cp /docker-entrypoint-initdb.d/recovery.conf $DATA/
+sed -i "s/\${SHOST}/"${SHOST}"/" $DATA/recovery.conf
+sed -i "s/\${SPORT}/"${SPORT}"/" $DATA/recovery.conf
+sed -i "s/\${SPASSWORD}/"${SPASSWORD}"/" $DATA/recovery.conf
 echo "slave OK !"
 fi
 
+# docker exec -it db crontab -u postgres -l
+# find $* -mtime +10 -name "*" -exec rm -rf {} \;
+if [ -z $LOGDAY ]; then
+echo   "LOGDAY is null !" 
+else
+echo "docker exec -it db crontab -u postgres -l" && echo "0 0 * * * find "$DATA"/log -mtime +"${LOGDAY}" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && cat $DATA/conf && rm -f $DATA/conf
+fi
+
 pg_ctl restart
-# apt-get -y install postgresql-10-cron
-#sed -i "s/exit 101/exit 0/" /usr/sbin/policy-rc.d
-#update-rc.d cron defaults 99 update-rc.d cron start 20 2 3 4 5 6. stop 80 0 1 6 .
-# service cron status
-#crontab crontab.txt

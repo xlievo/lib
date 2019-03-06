@@ -47,6 +47,6 @@ COPY init.sh /docker-entrypoint-initdb.d/
 COPY recovery.conf /docker-entrypoint-initdb.d
 RUN chown postgres:postgres /docker-entrypoint-initdb.d/recovery.conf \
  && chown postgres:root /root
-
+ 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
