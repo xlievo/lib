@@ -43,10 +43,13 @@ RUN sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
  && sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#archive_command = '\'''\''/archive_command = '\''cp %p \/var\/lib\/postgresql\/data\/pg_archive\/%f'\''/g' $CONF
 
+COPY start.sh /
 COPY init.sh /docker-entrypoint-initdb.d/
 COPY recovery.conf /docker-entrypoint-initdb.d
-RUN chown postgres:postgres /docker-entrypoint-initdb.d/recovery.conf \
- && chown postgres:root /root
- 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY postgresql.ex.conf /docker-entrypoint-initdb.d/
+
+RUN chown postgres:root /root \
+ && chown postgres:root /var/spool/cron/crontabs \
+ && chmod +x /usr/local/bin/docker-entrypoint.sh \
+ && chmod +x /start.sh

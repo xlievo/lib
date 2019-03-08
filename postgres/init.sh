@@ -3,12 +3,11 @@
 DATA=/var/lib/postgresql/data
 
 mkdir -p $DATA/pg_archive
-#mkdir -p $DATA/log
 
 p=`openssl rand -hex 8 | cut -c 1-8`
 
 psql -v ON_ERROR_STOP=1 --username="$POSTGRES_USER" <<-EOSQL
-    create role replica login replication encrypted password '$p'; 
+    create role replica login replication encrypted password '$p';
 EOSQL
 
 echo 'master replica password '$p
@@ -30,12 +29,9 @@ sed -i "s/\${SPASSWORD}/"${SPASSWORD}"/" $DATA/recovery.conf
 echo "slave OK !"
 fi
 
-# docker exec -it db crontab -u postgres -l
-# find $* -mtime +10 -name "*" -exec rm -rf {} \;
-if [ -z $LOGDAY ]; then
-echo   "LOGDAY is null !" 
-else
-echo "docker exec -it db crontab -u postgres -l" && echo "0 0 * * * find "$DATA"/log -mtime +"${LOGDAY}" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && cat $DATA/conf && rm -f $DATA/conf
-fi
+cp /docker-entrypoint-initdb.d/postgresql.ex.conf $DATA/
+mkdir -p $DATA/backups
+export back_directory=$DATA/backups
+echo backups=$back_directory
 
 pg_ctl restart

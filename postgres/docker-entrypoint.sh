@@ -2,7 +2,9 @@
 set -Eeo pipefail
 # TODO swap to -Eeuo pipefail above (after handling all potentially-unset variables)
 
-service cron start
+if [ `whoami` = "root" ]; then
+ service cron start;
+fi
 
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
@@ -174,5 +176,7 @@ if [ "$1" = 'postgres' ]; then
 		echo
 	fi
 fi
+
+/start.sh
 
 exec "$@"
