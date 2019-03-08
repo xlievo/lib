@@ -1,6 +1,6 @@
-master: docker run --restart=always -d --name db -v /root/workspace/db:/var/lib/postgresql/data -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -p 5920:5432 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
+master: docker run --restart=always -d --name db -v /root/workspace/db:/var/lib/postgresql/data -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -e LOGDAY=30 -p 5920:5432 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
 
-slave: docker run --restart=always -d --name db2 -v /root/workspace/db2:/var/lib/postgresql/data -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -p 5921:5432 -e SHOST=172.17.0.1 -e SPORT=5920 -e SPASSWORD=e3980c76 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
+slave: docker run --restart=always -d --name db2 -v /root/workspace/db2:/var/lib/postgresql/data -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -e LOGDAY=30 -p 5921:5432 -e SHOST=172.17.0.1 -e SPORT=5920 -e SPASSWORD=e3980c76 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
 
 # https://github.com/docker-library/postgres
 
