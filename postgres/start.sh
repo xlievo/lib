@@ -4,12 +4,15 @@ DATA=/var/lib/postgresql/data
 CONF=$DATA/postgresql.conf
 CONFEX=$DATA/postgresql.ex.conf
 
+logging_collector_key=`cat $CONF | grep logging_collector | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
 log_directory_key=`cat $CONF | grep log_directory | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
 log_day_key=`cat $CONFEX | grep log_day | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
 back_day_key=`cat $CONFEX | grep back_day | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
 back_auto_key=`cat $CONFEX | grep back_auto | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
 back_directory_key=`cat $CONFEX | grep back_directory | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
 back_time_key=`cat $CONFEX | grep back_time | awk -F'=' '{ print $1 }' | sed s/[[:space:]]//g`
+
+logging_collector=`cat $CONF | grep logging_collector | awk -F'=' '{ print $2 }' | awk -F'#' '{ print $1 }' | sed s/[[:space:]]//g`
 log_directory=`cat $CONF | grep log_directory | awk -F'=' '{ print $2 }' | awk -F'#' '{ print $1 }' | sed s/[[:space:]\']//g`
 log_day=`cat $CONFEX | grep log_day | awk -F'=' '{ print $2 }' | awk -F'#' '{ print $1 }' | sed s/[[:space:]]//g`
 back_day=`cat $CONFEX | grep back_day | awk -F'=' '{ print $2 }' | awk -F'#' '{ print $1 }' | sed s/[[:space:]]//g`
@@ -23,7 +26,7 @@ cron_pg=/var/spool/cron/crontabs/postgres
 
 if [ -f $cron_pg ]; then
 crontab -r
-fi;
+fi
 
 if [[ $back_time_key == \#* ]]; then
 back_time=0
