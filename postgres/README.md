@@ -2,6 +2,14 @@ master: docker run --restart=always -d --name db -v /root/workspace/db:/var/lib/
 
 slave: docker run --restart=always -d --name db2 -v /root/workspace/db2:/var/lib/postgresql/data -p 5921:5432 -e SHOST=172.17.0.1 -e SPORT=5920 -e SPASSWORD=e3980c76 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
 
+Install zombodb plug-in https://github.com/zombodb/zombodb
+
+Open logs and regularly delete log files
+
+Automatic backup and regularly delete backup files
+
+See /var/lib/postgresql/data/postgresql.ex.conf
+
 # https://github.com/docker-library/postgres
 
 ## Maintained by: [the PostgreSQL Docker Community](https://github.com/docker-library/postgres)
