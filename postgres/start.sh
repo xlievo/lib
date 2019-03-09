@@ -32,14 +32,15 @@ if [[ $back_time_key == \#* ]]; then
 back_time=0
 fi
 
+if [[ $log_directory == \/* ]]; then
+log_directory=$log_directory
+else
+log_directory=$DATA/$log_directory
+fi
+
 if [[ ! $log_directory_key == \#* ]] && [[ ! $log_day_key == \#* ]] && [ ! -z $log_day ] && [ ! -1 = $log_day ] && [ true = `echo $log_day | grep -E '[^0-9]' >/dev/null && echo false || echo true` ]; then
 if [ -f $cron_pg ]; then
 crontab -l >> $DATA/conf
-fi
-if [[ $log_directory == \/* ]]; then
-back_directory=$log_directory
-else
-back_directory=$DATA/$log_directory
 fi
 echo "0 0 * * * find "$log_directory" -mtime +"$log_day" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
