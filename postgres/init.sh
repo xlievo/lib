@@ -2,6 +2,7 @@
 
 DATA=/var/lib/postgresql/data
 
+sed -i 's/^#log_filename = '\''postgresql-%Y-%m-%d_%H%M%S.log'\''/log_filename = '\''postgresql-'`hostname`'-%Y-%m-%d_%H%M%S.log'\''/g' $DATA/postgresql.conf
 mkdir -p $DATA/pg_archive
 
 p=`openssl rand -hex 8 | cut -c 1-8`
