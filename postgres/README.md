@@ -1,5 +1,7 @@
 Create log mount directories:
+
 mkdir -p /root/workspace/pg_log && chown -R 999 /root/workspace/pg_log
+
 mkdir -p /root/workspace/pg_backups && chown -R 999 /root/workspace/pg_backups
 
 master: docker run --restart=always -d --name db -v /root/workspace/db:/var/lib/postgresql/data -v /root/workspace/pg_log:/log -v /root/workspace/pg_backups:/backups -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -p 5920:5432 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
