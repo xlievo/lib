@@ -20,7 +20,7 @@ back_auto=`cat $CONFEX | grep back_auto | awk -F'=' '{ print $2 }' | awk -F'#' '
 back_directory=`cat $CONFEX | grep back_directory | awk -F'=' '{ print $2 }' | awk -F'#' '{ print $1 }' | sed s/[[:space:]\']//g`
 back_time=`cat $CONFEX | grep back_time | awk -F'=' '{ print $2 }' | awk -F'#' '{ print $1 }' | sed s/[[:space:]]//g`
 
-echo postgresql.ex.conf: log_day=$log_day back_auto=$back_auto back_directory=$back_directory back_time=$back_time back_day=$back_day
+echo $HOSTNAME postgresql.ex.conf: log_day=$log_day back_auto=$back_auto back_directory=$back_directory back_time=$back_time back_day=$back_day
 
 cron_pg=/var/spool/cron/crontabs/postgres
 
@@ -36,6 +36,7 @@ if [[ $log_directory == \/* ]]; then
 log_directory=$log_directory
 else
 log_directory=$DATA/$log_directory
+mkdir -p log_directory
 fi
 
 if [[ ! $log_directory_key == \#* ]] && [[ ! $log_day_key == \#* ]] && [ ! -z $log_day ] && [ ! -1 = $log_day ] && [ true = `echo $log_day | grep -E '[^0-9]' >/dev/null && echo false || echo true` ]; then
@@ -45,14 +46,16 @@ fi
 echo "0 0 * * * find "$log_directory" -mtime +"$log_day" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
 
-if [[ ! $back_day_key == \#* ]] && [ ! -z $back_day ] && [ ! -1 = $back_day ] && [ true = `echo $back_day | grep -E '[^0-9]' >/dev/null && echo false || echo true` ] && [[ ! $back_directory_key == \#* ]] && [ ! -z $back_directory ]; then
-if [ -f $cron_pg ]; then
-crontab -l >> $DATA/conf
-fi
 if [[ $back_directory == \/* ]]; then
 back_directory=$back_directory
 else
 back_directory=$DATA/$back_directory
+mkdir -p back_directory
+fi
+
+if [[ ! $back_day_key == \#* ]] && [ ! -z $back_day ] && [ ! -1 = $back_day ] && [ true = `echo $back_day | grep -E '[^0-9]' >/dev/null && echo false || echo true` ] && [[ ! $back_directory_key == \#* ]] && [ ! -z $back_directory ]; then
+if [ -f $cron_pg ]; then
+crontab -l >> $DATA/conf
 fi
 echo "0 0 * * * find "$back_directory" -mtime +"$back_day" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
@@ -61,7 +64,7 @@ if [[ ! $back_auto_key == \#* ]] && [ "on" = $back_auto ] && [ ! -z $back_time ]
 if [ -f $cron_pg ]; then
 crontab -l >> $DATA/conf
 fi
-echo "0 $back_time * * * pg_dumpall -U $POSTGRES_USER > $DATA/backups/\$(date -d \"2 second\" +\"\%Y-\%m-\%d-\%H-\%M-\%S\")" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
+echo "0 $back_time * * * pg_dumpall -U $POSTGRES_USER > $back_directory/\$(date -d \"2 second\" +\"\%Y-\%m-\%d-\%H-\%M-\%S\")-"$HOSTNAME"" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
 
 echo "docker exec -it db crontab -u postgres -l" 

@@ -15,7 +15,7 @@ ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
 RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\''/g' $CONF \
  && sed -i 's/^#logging_collector = off/logging_collector = on/g' $CONF \
- && sed -i 's/^#log_directory = '\''log'\''/log_directory = '\''\/log'\''/g' $CONF && mkdir -p /log && chown postgres:postgres /log \
+ && sed -i 's/^#log_directory = '\''log'\''/log_directory = '\''\/log'\''/g' $CONF \
  #&& sed -i 's/^#log_filename/log_filename/g' $CONF \
  && sed -i 's/^#log_rotation_age = 1d/log_rotation_age = 1d/g' $CONF \
  && sed -i 's/^#log_rotation_size = 10MB/log_rotation_size = 100MB/g' $CONF \
@@ -52,4 +52,8 @@ COPY postgresql.ex.conf /docker-entrypoint-initdb.d/
 RUN chown postgres:root /root \
  && chown postgres:root /var/spool/cron/crontabs \
  && chmod +x /usr/local/bin/docker-entrypoint.sh \
- && chmod +x /start.sh
+ && chmod +x /start.sh \
+ && mkdir -p /log && chown postgres:postgres /log \
+ && mkdir -p /backups && chown postgres:postgres /backups
+
+ENV BACKUPS=/backups

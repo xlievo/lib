@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export HOSTNAME=`hostname`
 DATA=/var/lib/postgresql/data
 
 mkdir -p $DATA/pg_archive
@@ -29,12 +30,12 @@ sed -i "s/\${SPASSWORD}/"${SPASSWORD}"/" $DATA/recovery.conf
 echo "slave" `hostname` "OK !"
 fi
 
-sed -i 's/^log_filename.*/log_filename = '\''postgresql-'`hostname`'-%Y-%m-%d_%H%M%S.log'\''/g' $DATA/postgresql.conf
-sed -i 's/^#log_filename.*/log_filename = '\''postgresql-'`hostname`'-%Y-%m-%d_%H%M%S.log'\''/g' $DATA/postgresql.conf
+sed -i 's/^log_filename.*/log_filename = '\''postgresql-'$HOSTNAME'-%Y-%m-%d_%H%M%S.log'\''/g' $DATA/postgresql.conf
+sed -i 's/^#log_filename.*/log_filename = '\''postgresql-'$HOSTNAME'-%Y-%m-%d_%H%M%S.log'\''/g' $DATA/postgresql.conf
 
 cp /docker-entrypoint-initdb.d/postgresql.ex.conf $DATA/
-mkdir -p $DATA/backups
-export back_directory=$DATA/backups
-echo backups=$back_directory
+#mkdir -p $DATA/backups
+#export back_directory=$DATA/backups
+#echo backups=$BACKUPS
 
 pg_ctl restart
