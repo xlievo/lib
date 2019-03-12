@@ -43,7 +43,7 @@ if [[ ! $log_directory_key == \#* ]] && [[ ! $log_day_key == \#* ]] && [ ! -z $l
 if [ -f $cron_pg ]; then
 crontab -l >> $DATA/conf
 fi
-echo "0 0 * * * find "$log_directory" -mtime +"$log_day" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
+echo "0 0 * * * find "$log_directory" -mtime +"$log_day" -name \"*"$HOSTNAME"\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
 
 if [[ $back_directory == \/* ]]; then
@@ -57,7 +57,7 @@ if [[ ! $back_day_key == \#* ]] && [ ! -z $back_day ] && [ ! -1 = $back_day ] &&
 if [ -f $cron_pg ]; then
 crontab -l >> $DATA/conf
 fi
-echo "0 0 * * * find "$back_directory" -mtime +"$back_day" -name \"*\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
+echo "0 0 * * * find "$back_directory" -mtime +"$back_day" -name \"*"$HOSTNAME"\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
 
 if [[ ! $back_auto_key == \#* ]] && [ "on" = $back_auto ] && [ ! -z "$back_time" ]; then

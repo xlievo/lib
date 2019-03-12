@@ -2,9 +2,9 @@ Create log mount directories:
 
 mkdir -p /root/workspace/pg_log && chown -R 999 /root/workspace/pg_log && mkdir -p /root/workspace/pg_backups && chown -R 999 /root/workspace/pg_backups
 
-master: docker run --restart=always -d --name db -v /root/workspace/db:/var/lib/postgresql/data -v /root/workspace/pg_log:/log -v /root/workspace/pg_backups:/backups -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -p 5920:5432 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
+master: docker run --restart=always -d --name db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -p 5920:5432 -v /root/workspace/db:/var/lib/postgresql/data -v /root/workspace/pg_log:/log -v /root/workspace/pg_backups:/backups xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
 
-slave: docker run --restart=always -d --name db2 -v /root/workspace/db2:/var/lib/postgresql/data -v /root/workspace/pg_log:/log -v /root/workspace/pg_backups:/backups -p 5921:5432 -e SHOST=172.17.0.1 -e SPORT=5920 -e SPASSWORD=e3980c76 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
+slave: docker run --restart=always -d --name db2 -e POSTGRES_USER=root -p 5920:5432 -v /root/workspace/db2:/var/lib/postgresql/data -v /root/workspace/pg_log:/log -v /root/workspace/pg_backups:/backups -e SHOST=172.17.0.1 -e SPORT=5920 -e SPASSWORD=e3980c76 xlievo/postgres:latest -c 'shared_buffers=256MB' -c 'max_connections=1000'
 
 1: master/slave
 
