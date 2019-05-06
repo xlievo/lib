@@ -55,7 +55,7 @@ if [[ ! $log_directory_key == \#* ]] && [[ ! $log_day_key == \#* ]] && [ ! -z $l
 if [ -f $cron_pg ]; then
 crontab -l >> $DATA/conf
 fi
-echo "$log_clear_time find "$log_directory" -mtime +"$log_day" -name \"*"$HOSTNAME"\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
+echo "$log_clear_time find "$log_directory" -mtime +"$log_day" -name \"*"$HOSTNAME.log"\" -exec rm -rf {} \;" >> $DATA/conf && crontab $DATA/conf && rm -f $DATA/conf
 fi
 
 if [[ $back_directory == \/* ]]; then
