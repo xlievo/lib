@@ -17,4 +17,3 @@ services:
         # mount docker sock and binary for docker in docker (only works on linux)
         - ./run/docker.sock:/var/run/docker.sock
         - ./bin/docker:/usr/bin/docker
-        - /root/workspace/ci/data:/var/jenkins_home/data
