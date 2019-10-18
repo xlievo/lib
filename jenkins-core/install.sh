@@ -14,5 +14,8 @@ chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
 chown root:root /etc/apt/sources.list.d/microsoft-prod.list
 
 apt-get update
+apt-get install apt-transport-https
+apt-get update
 apt-get install -y dotnet-sdk-2.2
+apt-get install -y dotnet-sdk-3.0
 apt-get clean
