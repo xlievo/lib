@@ -1,5 +1,5 @@
 # Based on instructiions at https://www.microsoft.com/net/download/linux-package-manager/debian9/sdk-current
-# Install dependency for .NET Core 2.2.203 .NET Core 3.0
+# Install dependency for .NET Core 2.2.203-1 .NET Core 3.0
 apt-get update
 apt-get install -y curl libunwind8 gettext apt-transport-https sudo
 
