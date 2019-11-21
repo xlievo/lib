@@ -16,6 +16,9 @@ echo 'master replica password '$p
 echo 'host replication replica 0.0.0.0/0 md5' >> $DATA/pg_hba.conf
 # SHOST SPORT SPASSWORD
 if [ -z $SPASSWORD ]; then
+sed -i 's/^max_wal_senders = 32/max_wal_senders = 2000/g' $DATA/postgresql.conf
+sed -i 's/^wal_keep_segments = 640/wal_keep_segments = 2048/g' $DATA/postgresql.conf
+sed -i 's/^#max_replication_slots = 10/max_replication_slots = 64/g' $DATA/postgresql.conf
 echo "master" `hostname` "OK !"
 else
 echo "SHOST="${SHOST} "SPORT="${SPORT} "SPASSWORD="${SPASSWORD}
@@ -27,11 +30,6 @@ cp /docker-entrypoint-initdb.d/recovery.conf $DATA/
 sed -i "s/\${SHOST}/"${SHOST}"/" $DATA/recovery.conf
 sed -i "s/\${SPORT}/"${SPORT}"/" $DATA/recovery.conf
 sed -i "s/\${SPASSWORD}/"${SPASSWORD}"/" $DATA/recovery.conf
-
-sed -i 's/^max_wal_senders = 32/max_wal_senders = 2000/g' $DATA/postgresql.conf
-sed -i 's/^wal_keep_segments = 640/wal_keep_segments = 2048/g' $DATA/postgresql.conf
-sed -i 's/^#max_replication_slots = 10/max_replication_slots = 64/g' $DATA/postgresql.conf
-
 echo "slave" `hostname` "OK !"
 fi
 
