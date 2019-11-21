@@ -40,7 +40,7 @@ RUN sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
  && sed -i 's/^#wal_receiver_status_interval = 10s/wal_receiver_status_interval = 10s/g' $CONF \
  && sed -i 's/^#hot_standby_feedback = off/hot_standby_feedback = on/g' $CONF \
  # archive_mode archive_command
- && sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
+ # && sed -i 's/^#archive_mode = off/archive_mode = on/g' $CONF \
  && sed -i 's/^#archive_command = '\'''\''/archive_command = '\''cp %p \/var\/lib\/postgresql\/data\/pg_archive\/%f'\''/g' $CONF
 
 COPY start.sh /
