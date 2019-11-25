@@ -14,7 +14,7 @@ RUN apt-get update \
 ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
 RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\''/g' $CONF \
- && sed -i 's/^#logging_collector = off/logging_collector = on/g' $CONF \
+ # && sed -i 's/^#logging_collector = off/logging_collector = on/g' $CONF \
  && sed -i 's/^#log_directory = '\''log'\''/log_directory = '\''\/log'\''/g' $CONF \
  #&& sed -i 's/^#log_filename/log_filename/g' $CONF \
  && sed -i 's/^#log_rotation_age = 1d/log_rotation_age = 1d/g' $CONF \
