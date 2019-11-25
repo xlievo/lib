@@ -31,7 +31,6 @@ cp /docker-entrypoint-initdb.d/recovery.conf $DATA/
 sed -i "s/\${SHOST}/"${SHOST}"/" $DATA/recovery.conf
 sed -i "s/\${SPORT}/"${SPORT}"/" $DATA/recovery.conf
 sed -i "s/\${SPASSWORD}/"${SPASSWORD}"/" $DATA/recovery.conf
-sed -i 's/^logging_collector = off/logging_collector = on/g' $DATA/postgresql.conf
 echo "slave" `hostname` "OK !"
 fi
 
