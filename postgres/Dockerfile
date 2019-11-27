@@ -5,11 +5,18 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN apt-get update \
+ && apt-get install -y wget \
+ && apt-get install -y apt-transport-https \
  && apt-get install -y libcurl4-openssl-dev \
  && apt-get install -y libcurl4-nss-dev \
  && apt-get install -y libcurl4-gnutls-dev \
  && dpkg -i zombodb_jessie_pg10-10-1.0.3_amd64.deb \
  && rm -f zombodb_jessie_pg10-10-1.0.3_amd64.deb
+
+RUN sh -c "echo 'deb https://packagecloud.io/timescale/timescaledb/debian/ `lsb_release -c -s` main' > /etc/apt/sources.list.d/timescaledb.list"
+RUN wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add -
+RUN apt-get update
+RUN apt-get install -y timescaledb-postgresql-10
 
 ENV CONF /usr/share/postgresql/postgresql.conf.sample
 
