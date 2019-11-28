@@ -5,7 +5,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY zombodb_jessie_pg10-10-1.0.3_amd64.deb /
 RUN apt-get update \
- && apt-get install -y apt-utils \
  && apt-get install -y wget \
  && apt-get install -y apt-transport-https \
  && apt-get install -y libcurl4-openssl-dev \
