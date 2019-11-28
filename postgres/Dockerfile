@@ -23,7 +23,7 @@ ENV CONF /usr/share/postgresql/postgresql.conf.sample
 RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\''/g' $CONF \
  # && sed -i 's/^#logging_collector = off/logging_collector = on/g' $CONF \
  && sed -i 's/^#log_directory = '\''log'\''/log_directory = '\''\/log'\''/g' $CONF \
- #&& sed -i 's/^#log_filename/log_filename/g' $CONF \
+ # && sed -i 's/^#log_filename/log_filename/g' $CONF \
  && sed -i 's/^#log_rotation_age = 1d/log_rotation_age = 1d/g' $CONF \
  && sed -i 's/^#log_rotation_size = 10MB/log_rotation_size = 100MB/g' $CONF \
  #&& sed -i 's/^#log_error_verbosity = default/log_error_verbosity = verbose/g' $CONF \
@@ -40,9 +40,9 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
 
 RUN sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
  && sed -i 's/^#fsync = on/fsync = off/g' $CONF \
- && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
- && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
- && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF \
+ # && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
+ # && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
+ # && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF \
  && sed -i 's/^#hot_standby = on/hot_standby = on/g' $CONF \
  && sed -i 's/^#max_standby_streaming_delay = 30s/max_standby_streaming_delay = 30s/g' $CONF \
  && sed -i 's/^#wal_receiver_status_interval = 10s/wal_receiver_status_interval = 10s/g' $CONF \
