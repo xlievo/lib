@@ -40,6 +40,7 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
 
 RUN sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
  && sed -i 's/^#fsync = on/fsync = off/g' $CONF \
+ && sed -i 's/^#shared_preload_libraries = ''/shared_preload_libraries = 'timescaledb'/g' $CONF \
  # && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
  # && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
  # && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF \
