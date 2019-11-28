@@ -40,7 +40,7 @@ fi
 sed -i 's/^log_filename.*/log_filename = '\''postgresql-%Y-%m-%d_%H%M%S-'$HOSTNAME'.log'\''/g' $DATA/postgresql.conf
 sed -i 's/^#log_filename.*/log_filename = '\''postgresql-%Y-%m-%d_%H%M%S-'$HOSTNAME'.log'\''/g' $DATA/postgresql.conf
 
-# sed -i 's/^#shared_preload_libraries = '\'\''/shared_preload_libraries = '\'timescaledb\''/g' $DATA/postgresql.conf
+sed -i 's/^#shared_preload_libraries = '\'\''/shared_preload_libraries = '\'timescaledb\''/g' $DATA/postgresql.conf
 
 #mkdir -p $DATA/backups
 #export back_directory=$DATA/backups
