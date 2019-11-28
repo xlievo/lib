@@ -39,6 +39,7 @@ RUN sed -i 's/^#log_destination = '\''stderr'\''/log_destination = '\''stderr'\'
 # -c 'shared_buffers=2GB' -c 'max_connections=1000' -c 'work_mem=1GB'
 
 RUN sed -i 's/^#wal_level = replica/wal_level = hot_standby/g' $CONF \
+ && sed -i 's/^#fsync = on/fsync = off/g' $CONF \
  && sed -i 's/^#max_wal_senders = 10/max_wal_senders = 32/g' $CONF \
  && sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 64/g' $CONF \
  && sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $CONF \
