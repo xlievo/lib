@@ -5,6 +5,8 @@ DATA=/var/lib/postgresql/data
 
 mkdir -p $DATA/pg_archive
 
+cp /docker-entrypoint-initdb.d/postgresql.ex.conf $DATA/
+
 p=`openssl rand -hex 8 | cut -c 1-8`
 
 psql -v ON_ERROR_STOP=1 --username="$POSTGRES_USER" <<-EOSQL
@@ -37,7 +39,6 @@ fi
 sed -i 's/^log_filename.*/log_filename = '\''postgresql-%Y-%m-%d_%H%M%S-'$HOSTNAME'.log'\''/g' $DATA/postgresql.conf
 sed -i 's/^#log_filename.*/log_filename = '\''postgresql-%Y-%m-%d_%H%M%S-'$HOSTNAME'.log'\''/g' $DATA/postgresql.conf
 
-cp /docker-entrypoint-initdb.d/postgresql.ex.conf $DATA/
 #mkdir -p $DATA/backups
 #export back_directory=$DATA/backups
 #echo backups=$BACKUPS
