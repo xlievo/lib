@@ -19,7 +19,7 @@ echo 'host replication replica 0.0.0.0/0 md5' >> $DATA/pg_hba.conf
 # SHOST SPORT SPASSWORD
 if [ -z $SPASSWORD ]; then
 sed -i 's/^max_wal_senders = 32/max_wal_senders = 2000/g' $DATA/postgresql.conf
-sed -i 's/^wal_keep_segments = 640/wal_keep_segments = 2048/g' $DATA/postgresql.conf
+sed -i 's/^wal_keep_segments = 64/wal_keep_segments = 2048/g' $DATA/postgresql.conf
 sed -i 's/^#max_replication_slots = 10/max_replication_slots = 64/g' $DATA/postgresql.conf
 sed -i 's/^back_auto = off/back_auto = on/g' $DATA/postgresql.ex.conf
 echo "master" `hostname` "OK !"
