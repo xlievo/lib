@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
+﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.1
 
 RUN echo `cat /etc/issue`
 #ENV TZ=Asia/Shanghai
