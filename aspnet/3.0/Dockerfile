@@ -8,10 +8,9 @@ RUN echo `cat /etc/issue`
 RUN apt-get update
 
 #https://wkhtmltopdf.org/downloads.html
-#https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb
 RUN curl https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb -O --progress
-RUN apt-get install -y apache2-utils fontconfig libjpeg62-turbo libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base
-RUN dpkg -i wkhtmltox_0.12.5-1.buster_amd64.deb && rm -rf wkhtmltox_0.12.5-1.buster_amd64.deb
+RUN apt-get install -y fontconfig libjpeg62-turbo libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base
+RUN dpkg -i wkhtmltox_0.12.5-1.buster_amd64.deb
 
 #RUN mkdir -p /root/workspace
 #COPY /* /root/workspace/
