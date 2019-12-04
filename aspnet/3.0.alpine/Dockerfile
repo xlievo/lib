@@ -7,4 +7,4 @@ RUN echo `cat /etc/issue`
 #RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 RUN apk update
 
-RUN apk add apache2-utils wkhtmltopdf
+RUN apk add --no-cache apache2-utils wkhtmltopdf
