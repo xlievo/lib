@@ -6,4 +6,4 @@ RUN echo `cat /etc/issue`
 
 RUN apk update
 
-RUN apk add -y apache2-utils wkhtmltopdf
+RUN apk add apache2-utils wkhtmltopdf
