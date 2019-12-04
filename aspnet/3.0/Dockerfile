@@ -5,7 +5,7 @@ RUN echo `cat /etc/issue`
 #ENV LC_ALL=zh_CN.UTF-8
 
 #RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-#RUN apt-get update
+RUN apt-get update
 
 #https://wkhtmltopdf.org/downloads.html
 #https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb
