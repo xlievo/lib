@@ -8,17 +8,6 @@ ENV LC_ALL=zh_CN.UTF-8
 RUN apt-get update
 RUN apt-get install -y wget apache2-utils fontconfig libjpeg62-turbo libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base
 
-#https://wkhtmltopdf.org/downloads.html
 #https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb
 RUN wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb
 RUN dpkg -i wkhtmltox_0.12.5-1.buster_amd64.deb && rm -rf wkhtmltox_0.12.5-1.buster_amd64.deb
-
-#RUN mkdir -p /root/workspace
-#COPY /* /root/workspace/
-#RUN dpkg -i /root/workspace/wkhtmltox_0.12.5-1.buster_amd64.deb
-
-# ENTRYPOINT ["wkhtmltoimage"]
-#
-#WORKDIR /root/workspace/
-#RUN chmod +x /root/workspace/HTML2Image
-#ENTRYPOINT ["/root/workspace/HTML2Image"]
