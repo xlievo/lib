@@ -18,7 +18,7 @@ echo 'master replica password '$p
 echo 'host replication replica 0.0.0.0/0 md5' >> $DATA/pg_hba.conf
 # SHOST SPORT SPASSWORD
 if [ -z $SPASSWORD ]; then
-sed -i 's/^#max_wal_senders = 10/max_wal_senders = 2000/g' $DATA/postgresql.conf
+# sed -i 's/^#max_wal_senders = 10/max_wal_senders = 2000/g' $DATA/postgresql.conf
 sed -i 's/^#wal_keep_segments = 0/wal_keep_segments = 2048/g' $DATA/postgresql.conf
 sed -i 's/^#wal_sender_timeout = 60s/wal_sender_timeout = 60s/g' $DATA/postgresql.conf
 sed -i 's/^#max_replication_slots = 10/max_replication_slots = 64/g' $DATA/postgresql.conf
