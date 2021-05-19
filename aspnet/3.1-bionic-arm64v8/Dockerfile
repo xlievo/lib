@@ -7,7 +7,7 @@ RUN curl -sL -o qemu-3.0.0+resin-aarch64.tar.gz https://github.com/balena-io/qem
 FROM mcr.microsoft.com/dotnet/aspnet:3.1-bionic-arm64v8
 COPY --from=builder /go/qemu-aarch64-static /usr/bin/
 
-RUN echo `cat /etc/issue`
+#RUN echo `cat /etc/issue`
 
 ENV TZ=Asia/Shanghai
 ENV DEBIAN_FRONTEND noninteractive
