@@ -9,9 +9,9 @@ COPY --from=builder /go/qemu-aarch64-static /usr/bin/
 
 LABEL maintainer "Fluentd developers <fluentd@googlegroups.com>"
 LABEL Description="Fluentd docker image" Vendor="Fluent Organization" Version="1.12.3"
-ARG CROSS_BUILD_START="cross-build-start"
-ARG CROSS_BUILD_END="cross-build-end"
-RUN [ ${CROSS_BUILD_START} ]
+#ARG CROSS_BUILD_START="cross-build-start"
+#ARG CROSS_BUILD_END="cross-build-end"
+RUN [ "cross-build-start" ]
 ENV TINI_VERSION=0.18.0
 
 RUN apt-get update
@@ -30,3 +30,5 @@ RUN apt-get install -y --no-install-recommends locales locales-all tzdata libgdi
 	&& dpkg-reconfigure -f noninteractive tzdata \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
+
+RUN [ "cross-build-end" ]
