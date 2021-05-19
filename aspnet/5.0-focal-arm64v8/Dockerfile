@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:3.1-bionic
+﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal-arm64v8
 
 RUN echo `cat /etc/issue`
 
