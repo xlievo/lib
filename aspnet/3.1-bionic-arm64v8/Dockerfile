@@ -8,8 +8,8 @@ ENV LC_ALL=zh_CN.UTF-8
 ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN.UTF-8
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends locales locales-all
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends locales locales-all
 RUN apt-get install -y tzdata libgdiplus apache2-utils libc6-dev fontconfig
 RUN apt-get install -y libx11-6 libxcb1 libxext6 libxrender1 xfonts-75dpi xfonts-base libjpeg62-dev
 
