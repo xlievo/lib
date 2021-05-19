@@ -1,6 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal-arm64v8
 
-RUN echo `cat /etc/issue`
+#RUN echo `cat /etc/issue`
 
 ENV TZ=Asia/Shanghai
 ENV DEBIAN_FRONTEND noninteractive
