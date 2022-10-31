@@ -15,6 +15,6 @@ chown root:root /etc/apt/sources.list.d/microsoft-prod.list
 
 apt-get update
 apt-get install -y dotnet-sdk-2.2=2.2.203-1
-apt-get install -y dotnet-sdk-3.0
 apt-get install -y dotnet-sdk-3.1
+apt-get install -y dotnet-sdk-5.0
 apt-get clean
