@@ -1,5 +1,5 @@
 FROM jenkins/jenkins:2.235.3
-RUN /usr/local/bin/install-plugins.sh publish-over-ssh gitee copyartifact #gogs-webhook
+RUN /usr/local/bin/install-plugins.sh publish-over-ssh gitee copyartifact git-client #gogs-webhook
 
 USER root
 COPY install.sh install.sh
