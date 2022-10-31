@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:2.235.3
 RUN /usr/local/bin/install-plugins.sh publish-over-ssh gitee copyartifact #gogs-webhook
 
 USER root
