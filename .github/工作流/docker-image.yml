@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file aspnet/6.0-focal/Dockerfile --tag aspnet:6.0-focal
+      run: docker build . --file aspnet/alpine.3.17-sdk/Dockerfile --tag dotnetsdk:7.0.102-alpine3.17-amd64
     - name: Dockerize
       if: success()
       uses: manusa/actions-publish-docker@v1.1.2
