@@ -13,6 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file ./aspnet/alpine.3.17-sdk/Dockerfile --tag dotnet-sdk-alpine:7.0.103-3.17-v1
+    -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    -
+        name: Build and push
+          uses: docker/build-push-action@v4
+          with:
+            file: ./aspnet/alpine.3.17-sdk/Dockerfile
+            context: .
+            push: true
+            tags: user/dotnet-sdk-alpine:7.0.103-3.17-v1
