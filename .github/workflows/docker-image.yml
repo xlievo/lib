@@ -25,4 +25,4 @@ jobs:
         with:
           file: ./aspnet/alpine.3.17-sdk/Dockerfile
           push: true
-          tags: user/dotnet-sdk-alpine:7.0.103-3.17-v1
+          tags: xlievo/dotnet-sdk-alpine:7.0.103-3.17-v1
