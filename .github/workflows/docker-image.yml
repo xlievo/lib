@@ -23,7 +23,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./aspnet/alpine.3.17-sdk/Dockerfile
+          file: aspnet/alpine.3.17-sdk/Dockerfile
           context: .
           push: true
           tags: user/dotnet-sdk-alpine:7.0.103-3.17-v1
