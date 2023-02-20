@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file ./aspnet/alpine.3.17-sdk/Dockerfile --tag dotnet-sdk-alpine:7.0.103-3.17-v1
+      run: docker build . --file aspnet/alpine.3.17-sdk/Dockerfile --tag dotnet-sdk-alpine:7.0.103-3.17-v1
