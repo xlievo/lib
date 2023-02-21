@@ -23,6 +23,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./aspnet/alpine.3.17-sdk/Dockerfile
+          file: ./dotnet/sdk-7.0.103-alpine3.17-amd64
           push: true
-          tags: xlievo/dotnet:[sdk:7.0.103-alpine3.17-amd64]
+          tags: xlievo/dotnet:sdk-7.0.103-alpine3.17-amd64
