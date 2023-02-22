@@ -20,9 +20,16 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
     -
-        name: Build and push
+        name: Build and push sdk
         uses: docker/build-push-action@v4
         with:
           file: ./dotnet/sdk-7.0.103-alpine3.17-amd64
           push: true
           tags: xlievo/dotnet:sdk-7.0.103-alpine3.17-amd64
+    -
+        name: Build and push alpine
+        uses: docker/build-push-action@v4
+        with:
+          file: ./dotnet/alpine3.17-amd64
+          push: true
+          tags: xlievo/dotnet:alpine3.17-amd64
