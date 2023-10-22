@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0-jammy
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0.12-jammy-amd64
 
 RUN echo `cat /etc/issue`
 
