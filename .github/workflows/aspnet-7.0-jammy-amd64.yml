@@ -23,6 +23,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./7.0-jammy/Dockerfile
+          file: ./aspnet/7.0-jammy/Dockerfile
           push: true
-          tags: xlievo/aspnet:7.0.12-jammy-amd64
+          tags: xlievo/aspnet:7.0-jammy-amd64
